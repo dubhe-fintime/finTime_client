@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fin-Time</title>
+
+    <!-- FullCalendar CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet">
+
+    <!-- FullCalendar Core -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <script src="{{ url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/crypto-js.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/sha256.js') }}"></script>
+
+    <style>
+       /* 기본 설정 */
+       #calendar {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+
+        /* 화면이 768px 이하일 때 달력 크기 */
+        @media (max-width: 768px) {
+            #calendar {
+                width: 100%;
+                padding: 0 10px;
+            }
+        }
+
+        /* 화면이 480px 이하일 때 달력 크기 */
+        @media (max-width: 480px) {
+            #calendar {
+                width: 100%;
+                padding: 0;
+            }
+        }
+        
+        #eventListItems li {
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="calendar"></div>
+    <div id="eventList" style="display: none;">
+        <h3>Selected Events <button id="closeEventList">X</button></h3>
+        <ul id="eventListItems">
+            <!-- Event list will be displayed here -->
+        </ul>
+    </div>
+
+    <script>
+        var calendarEl
+        var calendar
+
+        document.addEventListener('DOMContentLoaded', function () {
+            calendarEl = document.getElementById('calendar');
+            calendar = new FullCalendar.Calendar(calendarEl, {
+                initialView: 'dayGridMonth',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,listMonth'
+                },
+                titleFormat: { 
+                    year: 'numeric', 
+                    month: '2-digit'
+                },
+                viewDidMount: function(info) {
+                    // 현재 제목 가져오기 (기본값은 "02/2025" 형태)
+                    let titleElement = document.querySelector('.fc-toolbar-title');
+                    
+                    if (titleElement) {
+                        // "02/2025" → "2025년 02월"로 변환
+                        titleElement.innerText = titleElement.innerText.replace(/(\d{2})\/(\d{4})/, '$2년 $1월');
+                    }
+                },
+                events: [
+                    {
+                        title: 'Event 1', 
+                        start: '2025-01-01', 
+                        end: '2025-01-07' 
+                    },
+                    { 
+                        title: 'Event 2', 
+                        start: '2025-02-01', 
+                        end: '2025-02-07' 
+                    },
+                    { 
+                        title: 'Event 3', 
+                        start: '2025-03-01', 
+                        end: '2025-03-07'
+                     }
+                ],
+                eventClick: function(info) {
+                    // 클릭한 이벤트 정보
+                    const event = info.event;
+
+                    // 이벤트 상세 정보를 표시
+                    const eventListItems = document.getElementById('eventListItems');
+
+                    eventListItems.innerHTML = '';
+
+                    const listItem = document.createElement('li');
+                    listItem.innerHTML = `
+                        <strong>Title:</strong> ${event.title} <br>
+                        <strong>Start:</strong> ${event.start.toLocaleString()} <br>
+                        <strong>End:</strong> ${event.end ? event.end.toLocaleString() : 'N/A'} <br>
+                        <strong>Description:</strong> ${event.extendedProps.description || 'No description'}
+                    `;
+                    eventListItems.appendChild(listItem);
+
+                    // 이벤트 리스트 보이기
+                    eventList.style.display = 'block';
+                },
+                datesSet: function() {
+                    eventList.style.display = 'none'; // 캘린더 뷰 변경될 때 숨김
+                },
+                dayCellDidMount: function(info) {
+                // info.date.getDay() === 0 이면 일요일 (0: 일요일, 1: 월요일, ..., 6: 토요일)
+                if (info.date.getDay() === 0) {
+                    info.el.style.color = 'red'; // 글자 색상 변경
+                    info.el.style.fontWeight = 'bold'; // 글자 굵게
+                }
+            }
+
+            });
+            calendar.render();
+
+            initCalender();
+        });
+
+        function initCalender(){
+            requestEventInfo();
+
+            calendar.addEvent({
+                title: '타이틀입니다.',
+                start: '2025-02-20',
+                end: '2025-02-24',
+                backgroundColor: 'red', // 배경색
+                borderColor: 'darkred',  // 테두리색
+                textColor: 'blue'    // 텍스트색
+            });
+
+            calendar.render();
+
+             // X 버튼 클릭 시 숨기기
+             document.getElementById('closeEventList').addEventListener('click', function() {
+                eventList.style.display = 'none';
+            });
+        }
+
+        function requestEventInfo() {
+            $.ajax({
+                url: "{{domain}}:{{port}}/eventMst",
+                type: "POST",
+                contentType: "application/json",
+                dataType: "json",
+                success: function (response) {
+                    
+                }, 
+                error: function (xhr, error, status) {
+                    
+                }
+            })
+        }
+    </script>
+
+</body>
+</html>

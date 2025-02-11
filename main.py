@@ -91,6 +91,10 @@ def adminLogin():
     #return render_template("common/login.html", domain=domain, port=port)
     return render_template("page/index.html", domain=domain, port=port)
 
+@app.route("/Main")
+def Main():
+    #return render_template("common/login.html", domain=domain, port=port)
+    return render_template("page/fintimeMain.html", domain=domain, port=port)
 
 if __name__ == "__main__":
     while True:
