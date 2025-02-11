@@ -23,7 +23,13 @@ import configparser
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
 # ini 정보 취득
-config_path = os.path.join(script_dir, 'config.ini')
+environment = os.getenv('ENVIRONMENT', 'development')
+
+# ini 정보 취득
+if environment == 'production':
+    config_path = os.path.join(script_dir, 'config.ini')
+else:
+    config_path = os.path.join(script_dir, 'config_development.ini')
 config = configparser.ConfigParser()
 config.read(config_path, encoding="utf-8")
 domain = config['SERVER']['domain']
