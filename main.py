@@ -34,6 +34,7 @@ config = configparser.ConfigParser()
 config.read(config_path, encoding="utf-8")
 domain = config['SERVER']['domain']
 port = config['SERVER']['port_1']
+port2 = config['SERVER']['port_2']
 real_yn = config['SERVER']['real']
 server_host = config['SERVER']['server_host']
 success = config['CODE']['success']
@@ -93,6 +94,7 @@ socketio = SocketIO(app)
 
 if environment == 'development':
     domain = f"{domain}:{port}"
+    api_domain = f"{domain}:{port2}"
 else:
     domain = f"{domain}"
 
@@ -100,12 +102,12 @@ else:
 @app.route("/")
 def adminLogin():
     #return render_template("common/login.html", domain=domain, port=port)
-    return render_template("page/index.html", domain=domain)
+    return render_template("page/index.html", domain=domain, api_domain=api_domain)
 
 @app.route("/Main")
 def Main():
     #return render_template("common/login.html", domain=domain, port=port)
-    return render_template("page/fintimeMain.html", domain=domain)
+    return render_template("page/fintimeMain.html", domain=domain, api_domain=api_domain)
 
 if __name__ == "__main__":
     while True:
