@@ -91,16 +91,21 @@ app.secret_key = config['SERVER']['secret_key']  # 필수 값 (지정 필요)
 
 socketio = SocketIO(app)
 
+if environment == 'development':
+    domain = f"{domain}:{port}"
+else:
+    domain = f"{domain}"
+
 # 관리자 index 화면 호출
 @app.route("/")
 def adminLogin():
     #return render_template("common/login.html", domain=domain, port=port)
-    return render_template("page/index.html", domain=domain, port=port)
+    return render_template("page/index.html", domain=domain)
 
 @app.route("/Main")
 def Main():
     #return render_template("common/login.html", domain=domain, port=port)
-    return render_template("page/fintimeMain.html", domain=domain, port=port)
+    return render_template("page/fintimeMain.html", domain=domain)
 
 if __name__ == "__main__":
     while True:
