@@ -32,6 +32,7 @@ else:
     config_path = os.path.join(script_dir, 'config_development.ini')
 config = configparser.ConfigParser()
 config.read(config_path, encoding="utf-8")
+front_domain = config['SERVER']['front_domain']
 domain = config['SERVER']['domain']
 port = config['SERVER']['port_1']
 port2 = config['SERVER']['port_2']
@@ -93,22 +94,22 @@ app.secret_key = config['SERVER']['secret_key']  # 필수 값 (지정 필요)
 socketio = SocketIO(app)
 
 if environment == 'development':
-    mv_domain = f"{domain}:{port}"
+    front_domain = f"{front_domain}:{port}"
     api_domain = f"{domain}:{port2}"
 else:
-    mv_domain = f"{domain}"
+    front_domain = f"{front_domain}"
     api_domain = f"{domain}"
 
 # 관리자 index 화면 호출
 @app.route("/")
 def adminLogin():
     #return render_template("common/login.html", domain=domain, port=port)
-    return render_template("page/index.html", domain=mv_domain, api_domain=api_domain)
+    return render_template("page/index.html", domain=front_domain, api_domain=api_domain)
 
 @app.route("/Main")
 def Main():
     #return render_template("common/login.html", domain=domain, port=port)
-    return render_template("page/fintimeMain.html", domain=mv_domain, api_domain=api_domain)
+    return render_template("page/fintimeMain.html", domain=front_domain, api_domain=api_domain)
 
 if __name__ == "__main__":
     while True:
