@@ -97,6 +97,7 @@ if environment == 'development':
     api_domain = f"{domain}:{port2}"
 else:
     domain = f"{domain}"
+    api_domain = f"{domain}"
 
 # 관리자 index 화면 호출
 @app.route("/")
