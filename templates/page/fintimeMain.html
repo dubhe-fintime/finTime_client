@@ -98,6 +98,7 @@
                             successCallback(events);
                         },
                         error: function (xhr, error, status) {
+                            console.log('eventMst error', error);
                             // 에러 발생 시
                             failureCallback(error);
                         }
