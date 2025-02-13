@@ -74,8 +74,6 @@
                         contentType: "application/json",
                         dataType: "json",
                         data: JSON.stringify({
-                            start: fetchInfo.startStr.split('T')[0], // YYYY-MM-DD 형식으로 변환
-                            end: fetchInfo.endStr.split('T')[0]      // YYYY-MM-DD 형식으로 변환
                         }),
                         success: function (response) {
                             // 성공적으로 데이터를 받아왔을 때
