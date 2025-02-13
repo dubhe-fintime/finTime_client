@@ -79,7 +79,6 @@
                         }),
                         success: function (response) {
                             // 성공적으로 데이터를 받아왔을 때
-                            console.log(response);
                             let events = [];
                             response.forEach(function (event) {
                                 const startDate = new Date(event.evt_st_dt);  // 시작 날짜
