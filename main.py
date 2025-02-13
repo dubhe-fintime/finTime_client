@@ -24,7 +24,6 @@ script_dir = os.path.dirname(os.path.abspath(__file__))
 
 # ini 정보 취득
 environment = os.getenv('ENVIRONMENT', 'development')
-print(f">>>>>>>>>> environment: {environment}")
 
 # ini 정보 취득
 if environment == 'production':
