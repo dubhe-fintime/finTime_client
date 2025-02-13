@@ -24,24 +24,6 @@
             overflow: auto; /* 스크롤 가능 */
         }
 
-        /* 화면이 768px 이하일 때 */
-        @media (max-width: 768px) {
-            #calendar {
-                height: 85dvh; /* 더 넓게 보이도록 설정 */
-                max-height: calc(100vh - 50px);
-                padding: 0 10px;
-            }
-        }
-
-        /* 화면이 480px 이하일 때 */
-        @media (max-width: 480px) {
-            #calendar {
-                height: 80dvh; /* 화면 크기에 맞춤 */
-                max-height: calc(100vh - 50px);
-                padding: 0;
-            }
-        }
-
         /* 이벤트 리스트 스타일 */
         #eventListItems li {
             margin-bottom: 10px;
