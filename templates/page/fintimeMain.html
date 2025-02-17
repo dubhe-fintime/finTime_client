@@ -15,46 +15,58 @@
     <script src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
 
     <style>
-        /* 기본 설정 */
-        #calendar {
+         /* 캘린더 스타일 */
+         #calendar {
             max-width: 100%;
-            margin: 0 auto;
+            margin: 20px auto;
         }
 
-        /* 화면이 768px 이하일 때 달력 크기 */
+        /* 반응형 설정 */
         @media (max-width: 768px) {
             #calendar {
-                width: 100%;
-                padding: 0 10px;
+                height: 75vh;
+                padding: 10px;
             }
         }
 
-        /* 화면이 480px 이하일 때 달력 크기 */
         @media (max-width: 480px) {
             #calendar {
-                width: 100%;
-                padding: 0;
+                height: 70vh;
+                padding: 5px;
             }
         }
-        
-        #eventListItems li {
-            margin-bottom: 10px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            background-color: #f9f9f9;
+
+        /* 사이드바 스타일 */
+        #eventSidebar {
+            position: fixed; /* 화면 기준 고정 */
+            top: 0;
+            right: -1000px; /* 기본적으로 숨김 */
+            width: 300px;
+            height: 100%;
+            background-color: white;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            transition: right 0.3s ease-in-out;
+            z-index: 1000; /* 캘린더보다 높은 값으로 설정 */
+            overflow-y: auto; /* 스크롤 가능 */
         }
 
+        .fc { 
+            z-index: 500 !important; /* 캘린더의 z-index를 낮춤 */
+        }
     </style>
 </head>
 <body>
 
     <div id="calendar"></div>
-    <div id="eventList" style="display: none;">
-        <h3>Selected Events <button id="closeEventList">X</button></h3>
-        <ul id="eventListItems">
-            <!-- Event list will be displayed here -->
-        </ul>
+    <!-- 사이드바 추가 -->
+    <div id="eventSidebar">
+        <h4>Event Details</h4>
+        <p><strong>Title:</strong> <span id="sidebarEventTitle"></span></p>
+        <p><strong>Start:</strong> <span id="sidebarEventStart"></span></p>
+        <p><strong>End:</strong> <span id="sidebarEventEnd"></span></p>
+        <p><strong>Description:</strong> <span id="sidebarEventDescription"></span></p>
+        <button onclick="closeSidebar()">Close</button>
     </div>
 
     <script>
@@ -65,6 +77,8 @@
         document.addEventListener('DOMContentLoaded', function () {
             calendarEl = document.getElementById('calendar');
             calendar = new FullCalendar.Calendar(calendarEl, {
+                locale: 'ko',
+                aspectRatio: 0.7,
                 initialView: 'dayGridMonth',
                 events: function(fetchInfo, successCallback, failureCallback) {
                     $.ajax({
@@ -116,22 +130,14 @@
                     // 클릭한 이벤트 정보
                     const event = info.event;
 
-                    // 이벤트 상세 정보를 표시
-                    const eventListItems = document.getElementById('eventListItems');
+                    // 사이드바 내용 업데이트
+                    document.getElementById('sidebarEventTitle').textContent = event.title;
+                    document.getElementById('sidebarEventStart').textContent = event.start.toLocaleString();
+                    document.getElementById('sidebarEventEnd').textContent = event.end ? event.end.toLocaleString() : 'N/A';
+                    document.getElementById('sidebarEventDescription').textContent = event.extendedProps.description || 'No description';
 
-                    eventListItems.innerHTML = '';
-
-                    const listItem = document.createElement('li');
-                    listItem.innerHTML = `
-                        <strong>Title:</strong> ${event.title} <br>
-                        <strong>Start:</strong> ${event.start.toLocaleString()} <br>
-                        <strong>End:</strong> ${event.end ? event.end.toLocaleString() : 'N/A'} <br>
-                        <strong>Description:</strong> ${event.extendedProps.description || 'No description'}
-                    `;
-                    eventListItems.appendChild(listItem);
-
-                    // 이벤트 리스트 보이기
-                    eventList.style.display = 'block';
+                    // 사이드바 열기
+                    document.getElementById('eventSidebar').style.right = "0px";
                 },
                 datesSet: function() {
                     eventList.style.display = 'none'; // 캘린더 뷰 변경될 때 숨김
@@ -177,6 +183,12 @@
              document.getElementById('closeEventList').addEventListener('click', function() {
                 eventList.style.display = 'none';
             });
+        }
+
+
+        // 사이드바 닫기 함수
+        function closeSidebar() {
+            document.getElementById('eventSidebar').style.right = "-1000px";
         }
     </script>
 
