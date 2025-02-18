@@ -5,11 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 
     <title>Fin-Time</title>
+    <!-- FullCalendar core -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
 
-    <!-- FullCalendar CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/main.min.css" rel="stylesheet">
-    <!-- FullCalendar Core -->
-    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+    <!-- FullCalendar DayGrid Plugin (그리드 뷰) -->
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/daygrid@6.1.15/index.global.min.js"></script>
+
+    <!-- FullCalendar List Plugin (리스트 뷰) -->
+    <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/list@6.1.15/index.global.min.js"></script>
+
+    <!-- FullCalendar 스타일 (필요시 추가) -->
+    <!-- <link href="https://cdn.jsdelivr.net/npm/@fullcalendar/core@6.1.15/index.global.min.css" rel="stylesheet"> -->
+
     
     <script src="{{ url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
@@ -87,6 +94,21 @@
 
         .fc { 
             z-index: 500 !important; /* 캘린더의 z-index를 낮춤 */
+        }
+
+        .fc-day-sat {
+            background-color: white;
+            color: #007bff;
+        }
+
+        .fc-day-sun {
+            background-color: white;
+            color: #ff5733;
+        }
+
+        .fc-daygrid-more-link,
+        .fc-more-link {
+            color: black !important;  /* '더보기' 텍스트 색상 검은색 */
         }
     </style>
 </head>
@@ -181,17 +203,6 @@
                 },
                 datesSet: function() {
 
-                },
-                dayCellDidMount: function(info) {
-                    // info.date.getDay() === 0 이면 일요일 (0: 일요일, 1: 월요일, ..., 6: 토요일)
-                    /**
-                    if (info.el) {
-                        if (info.date.getDay() === 0) {
-                            info.el.style.color = 'red'; // 글자 색상 변경
-                            info.el.style.fontWeight = 'bold'; // 글자 굵게
-                        }
-                    }
-                    */
                 },
                 eventDidMount: function(info) {
                     // 팝오버 외부 클릭 시 팝오버 닫기 이벤트 추가
