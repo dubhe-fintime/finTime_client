@@ -82,7 +82,7 @@
                 initialView: 'dayGridMonth',
                 events: function(fetchInfo, successCallback, failureCallback) {
                     $.ajax({
-                        url: "{{api_domain}}/eventMst",  // API 엔드포인트
+                        url: "{{api_domain}}/getEventMst",  // API 엔드포인트
                         type: "POST",
                         contentType: "application/json",
                         dataType: "json",
