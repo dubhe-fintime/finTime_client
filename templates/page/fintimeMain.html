@@ -214,6 +214,13 @@
                             }
                         });
                     }
+
+                    // 시간 요소를 숨기기
+                    const eventTimeElement = info.el.querySelector('.fc-event-time');
+                    
+                    if (eventTimeElement) {
+                        eventTimeElement.style.display = 'none'; // 시간 숨기기
+                    }
                 },
                 dayMaxEvents: 5, 
                 moreLinkText: function(n) { // 더보기 텍스트 설정
