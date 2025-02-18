@@ -125,7 +125,7 @@
         <p><strong>Title:</strong> <span id="sidebarEventTitle"></span></p>
         <p><strong>Start:</strong> <span id="sidebarEventStart"></span></p>
         <p><strong>End:</strong> <span id="sidebarEventEnd"></span></p>
-        <p><strong>Description:</strong> <span id="sidebarEventDescription"></span></p>
+        <p><strong>Detail Link:</strong> <span id="sidebarEventDescription"></span></p>
         <button onclick="closeSidebar()">Close</button>
     </div>
 
@@ -196,7 +196,9 @@
                     document.getElementById('sidebarEventTitle').textContent = event.title;
                     document.getElementById('sidebarEventStart').textContent = event.start.toLocaleString();
                     document.getElementById('sidebarEventEnd').textContent = event.end ? event.end.toLocaleString() : 'N/A';
-                    document.getElementById('sidebarEventDescription').textContent = event.extendedProps.description || 'No description';
+                    document.getElementById('sidebarEventDescription').innerHTML = event.extendedProps.description 
+                        ? `<a href="${event.extendedProps.description}" target="_blank">${event.extendedProps.description}</a>` 
+                        : 'No Link';
 
                     // 사이드바 열기
                     document.getElementById('eventSidebar').style.right = "0px";
