@@ -162,10 +162,10 @@
                                         title: "[" + event.cor_nm + "] " + event.evt_title,
                                         start: startDate,
                                         end: endDate,
-                                        description: event.evt_dt_link || 'No description'
-                                        //backgroundColor: event.backgroundColor,
-                                        //borderColor: event.borderColor,
-                                        //textColor: event.textColor
+                                        description: event.evt_dt_link || 'No description',
+                                        backgroundColor: getColor(),
+                                        borderColor: getColor(),
+                                        textColor: "white"
                                     }
                                 );
                             });
@@ -238,10 +238,14 @@
        
         }
 
-
         // 사이드바 닫기 함수
         function closeSidebar() {
             document.getElementById('eventSidebar').style.right = "-1000px";
+        }
+
+        function getColor() {
+            // 금융사 코드별 색 추가 예정
+            return '#' + Math.floor(Math.random() * 16777215).toString(16);
         }
     </script>
 
