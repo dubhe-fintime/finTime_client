@@ -103,26 +103,6 @@
             text-align: right; /* 날짜 오른쪽 정렬 */
         }
 
-
-        /* 사이드바 스타일 */
-        #eventSidebar {
-            position: fixed; /* 화면 기준 고정 */
-            top: 0;
-            right: -1000px; /* 기본적으로 숨김 */
-            width: 300px;
-            height: 100%;
-            background-color: white;
-            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
-            padding: 20px;
-            transition: right 0.3s ease-in-out;
-            z-index: 1000; /* 캘린더보다 높은 값으로 설정 */
-            overflow-y: auto; /* 스크롤 가능 */
-        }
-
-        .fc { 
-            z-index: 500 !important; /* 캘린더의 z-index를 낮춤 */
-        }
-
         .fc-day-sat {
             background-color: white;
             color: #007bff;
@@ -264,6 +244,24 @@
             }
         }
 
+        /* 사이드바 스타일 */
+       #eventSidebar {
+            position: fixed; /* 화면 기준 고정 */
+            top: 0;
+            right: -1000px; /* 기본적으로 숨김 */
+            width: 300px;
+            height: 100%;
+            background-color: white;
+            box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            transition: right 0.3s ease-in-out;
+            z-index: 1000; /* 캘린더보다 높은 값으로 설정 */
+            overflow-y: auto; /* 스크롤 가능 */
+        }
+        
+        .fc { 
+            z-index: 500 !important; /* 캘린더의 z-index를 낮춤 */
+        }
 
 
     </style>
