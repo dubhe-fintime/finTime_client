@@ -76,6 +76,31 @@
                 padding: 0;
             }
         }
+       
+        .fc-daygrid-day-top {
+            display: flex;
+            justify-content: space-between; /* 날짜 왼쪽, 공휴일 오른쪽 */
+            align-items: center;
+            padding: 0 4px; /* 좌우 패딩 조정 */
+        }
+
+        .fc-daygrid-day-top.has-holiday .fc-daygrid-day-number {
+            color: red !important; /* 날짜를 빨간색으로 변경 */
+        }
+
+        .holiday-label {
+            font-size: 12px;
+            color: red;
+            white-space: nowrap; /* 공휴일 이름 줄바꿈 방지 */
+            text-align: left; /* 왼쪽 정렬 */
+            margin-right: auto; /* 왼쪽으로 밀기 */
+        }
+
+        .fc-daygrid-day-number {
+            flex-shrink: 0;
+            text-align: right; /* 날짜 오른쪽 정렬 */
+        }
+
 
         /* 사이드바 스타일 */
         #eventSidebar {
@@ -130,13 +155,38 @@
     </div>
 
     <script>
-        let titleModified = false; // 제목이 수정되었는지 확인하는 플래그
+        let holidayModified = false; // 제목이 수정되었는지 확인하는 플래그
+        let holidays = []; // 공휴일 데이터
         var calendarEl
         var calendar
 
         $(document).ready(function () {
-            initCalendar();
+            requestHoliday();
         })
+
+        function requestHoliday() {
+            $.ajax({
+                url: "{{api_domain}}/getHoiDay",
+                type: "POST",
+                success: function (response) {
+                    holidays = response.map(function(holiday) {
+                        const rawDate = holiday.hoi_date;
+                        const formattedDate = `${rawDate.slice(0, 4)}-${rawDate.slice(4, 6)}-${rawDate.slice(6, 8)}`;
+
+                        return {
+                            //date: formattedDate,  // 공휴일 날짜
+                            date: holiday.hoi_date,
+                            name: holiday.hoi_name   // 공휴일 이름
+                        };
+                    });
+                    
+                    initCalendar();
+                },
+                error: function () {
+                    alert("공휴일을 불러오는 데 실패했습니다.");
+                }
+            });
+        }
 
         function initCalendar() {
             calendarEl = document.getElementById('calendar');
@@ -144,48 +194,6 @@
                 locale: 'ko',
                 aspectRatio: 0.7,
                 initialView: 'dayGridMonth',
-                events: function(fetchInfo, successCallback, failureCallback) {
-                    $.ajax({
-                        url: "{{api_domain}}/getEventMst",  // API 엔드포인트
-                        type: "POST",
-                        contentType: "application/json",
-                        dataType: "json",
-                        data: JSON.stringify({
-                            start: fetchInfo.startStr.split('T')[0], // YYYY-MM-DD 형식으로 변환
-                            end: fetchInfo.endStr.split('T')[0]      // YYYY-MM-DD 형식으로 변환
-                        }),
-                        success: function (response) {
-                            // 성공적으로 데이터를 받아왔을 때
-                            let events = [];
-                            response.forEach(function (event) {
-                                const startDate = new Date(event.evt_st_dt);  // 시작 날짜
-                                startDate.setHours(0, 0, 0, 0); // 시분초 초기화
-
-                                const endDate = new Date(event.evt_ed_dt);    // 종료 날짜
-                                endDate.setHours(0, 0, 0, 0); // 시분초 초기화
-
-                                events.push(
-                                    {
-                                        title: "[" + event.cor_nm + "] " + event.evt_title,
-                                        start: startDate,
-                                        end: endDate,
-                                        description: event.evt_dt_link || 'No description',
-                                        backgroundColor: getColor(),
-                                        borderColor: getColor(),
-                                        textColor: "white"
-                                    }
-                                );
-                            });
-
-                            successCallback(events);
-                        },
-                        error: function (xhr, error, status) {
-                            console.log('eventMst error', error);
-                            // 에러 발생 시
-                            failureCallback(error);
-                        }
-                    });
-                },
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
@@ -194,6 +202,59 @@
                 titleFormat: { 
                     year: 'numeric', 
                     month: '2-digit'
+                },
+                eventSources: [
+                    {
+                        url: "{{api_domain}}/getEventMst",  // API 엔드포인트
+                        method: "POST",
+                        success: function (response) {
+                            // 서버에서 받은 데이터(response)를 FullCalendar 형식으로 변환
+                            return response.map(event => {
+                                const startDate = new Date(event.evt_st_dt);  // 시작 날짜
+                                startDate.setHours(0, 0, 0, 0); // 시분초 초기화
+
+                                const endDate = new Date(event.evt_ed_dt);    // 종료 날짜
+                                endDate.setHours(0, 0, 0, 0); // 시분초 초기화
+
+                                return {
+                                    title: "[" + event.cor_nm + "] " + event.evt_title,
+                                    start: startDate, // ISO 형식 (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss)
+                                    end: endDate || startDate, // 종료 날짜 없으면 시작 날짜로 설정
+                                    description: event.evt_dt_link || "No description",
+                                    backgroundColor: getColor(event.cor_no),
+                                    borderColor: getColor(event.cor_no),
+                                    textColor: "white"
+                                };
+                            });
+                        },
+                        failure: function () {
+                            alert("이벤트를 불러오는 데 실패했습니다.");
+                        }
+                    }
+                ],
+                datesSet: function(info) {
+                    markHolidays();
+                    /**
+                    holidays.forEach(function(holiday) {                    
+                        // holiday.date를 "2025년 1월 1일" 형식으로 변환
+                        
+                        const formattedDate = holiday.date.replace(/(\d{4})(\d{2})(\d{2})/, '$1년 $2월 $3일').replace(/0(\d)월/, '$1월').replace(/0(\d)일/, '$1일');
+
+                        console.log(formattedDate);
+                        // aria-label 속성값으로 날짜 찾기
+                        console.log(">> info.view.el >> " + info.view.el);
+                        const dayElement = $(info.view.el).find('.fc-daygrid-day-number').filter(function() {
+                            // a 태그의 aria-label 속성값을 기준으로 비교
+                            console.log(">>>>>" + $(this).attr('aria-label'));
+                            return $(this).attr('aria-label').includes(formattedDate);
+                        });
+
+                        if (dayElement.length) {
+                            // 공휴일 이름을 표시할 span 요소 추가
+                            dayElement.append('<span class="holiday-label">' + holiday.name + '</span>');
+                        }
+                    });
+                    */
                 },
                 eventClick: function(info) {
                     // 클릭한 이벤트 정보
@@ -209,9 +270,6 @@
 
                     // 사이드바 열기
                     document.getElementById('eventSidebar').style.right = "0px";
-                },
-                datesSet: function() {
-
                 },
                 eventDidMount: function(info) {
                     // 팝오버 외부 클릭 시 팝오버 닫기 이벤트 추가
@@ -245,14 +303,45 @@
             calendar.render();
         }
 
+        // 날짜 포맷 변환 함수 (YYYYMMDD → YYYY년 M월 D일)
+        function formatDate(holidayDate) {
+            return holidayDate.replace(/(\d{4})(\d{2})(\d{2})/, '$1년 $2월 $3일')
+                            .replace(/0(\d)월/, '$1월')
+                            .replace(/0(\d)일/, '$1일');
+        }
+
+        // 공휴일 표시 함수
+        function markHolidays() {
+            document.querySelectorAll('.holiday-label').forEach(el => el.remove());
+
+            document.querySelectorAll('.fc-daygrid-day-top').forEach(el => {
+                const ariaLabel = el.querySelector('.fc-daygrid-day-number')?.getAttribute('aria-label'); // 날짜 라벨 가져오기
+
+                holidays.forEach(holiday => {
+                    if (ariaLabel === formatDate(holiday.date)) {
+                        const holidayLabel = document.createElement('span');
+                        holidayLabel.classList.add('holiday-label');
+                        holidayLabel.innerText = holiday.name;
+                        //el.appendChild(holidayLabel);
+                        
+                        el.classList.add('has-holiday'); // 공휴일이 있는 날에 클래스 추가
+                        el.insertBefore(holidayLabel, el.firstChild); // 공휴일을 날짜 왼쪽에 추가
+
+                    }
+                });
+            });
+        }
+
         // 사이드바 닫기 함수
         function closeSidebar() {
             document.getElementById('eventSidebar').style.right = "-1000px";
         }
 
-        function getColor() {
-            // 금융사 코드별 색 추가 예정
-            return '#' + Math.floor(Math.random() * 16777215).toString(16);
+        function getColor(cor_no) {
+            switch (cor_no) {
+                default:
+                    return '#' + Math.floor(Math.random() * 16777215).toString(16);
+            }
         }
     </script>
 
