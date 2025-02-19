@@ -111,7 +111,18 @@ def main():
     #return render_template("common/login.html", domain=domain, port=port)
     return render_template("page/fintimeMain.html", domain=front_domain, api_domain=api_domain)
 
-if __name__ == "__main__":
+@app.route("/mypage")
+def mypage():
+    #return render_template("common/login.html", domain=domain, port=port)
+    return render_template("page/myPage.html", domain=front_domain, api_domain=api_domain)
+
+@app.route("/mypage_depth1")
+def mypage_depth1():
+    
+    #return render_template("common/login.html", domain=domain, port=port)
+    return render_template("page/mypage_depth1.html", domain=front_domain, api_domain=api_domain)
+
+if __name__ == "__main__": 
     while True:
         try:
             if real_yn == "Y":  # 운영 서버 여부

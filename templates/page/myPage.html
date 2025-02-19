@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIN-TIME | MYPAGE </title>
+    <script src="{{ url_for('static', filename='js/crypto-js.js') }}"></script>
+    <link href="{{ url_for('static', filename='style/common.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='style/lnb.css') }}" rel="stylesheet" />
+    <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            overflow-y: scroll; /* body 부분만 스크롤 가능 */
+            height: 100vh; /* body 높이 지정 */
+        }
+
+        .header {
+            background: var(--blue900);
+            color: white;
+            padding: 10px 20px;
+            width: 100%;
+            position: fixed; /* 고정된 헤더 */
+            top: 0;
+            z-index: 1200; /* 다른 요소 위로 */
+            display: flex; /* Flexbox 사용 */
+            justify-content: space-between; /* 좌우 정렬 */
+            align-items: center; /* 수직 정렬 */
+        }
+
+        .footer {
+            background: var(--blue900);
+            color: white;
+            padding: 10px 20px;
+            width: 100%;
+            position: fixed; /* 고정된 푸터 */
+            bottom: 0; /* 아래쪽 고정 */
+            z-index: 1200; /* 다른 요소 위로 */
+            display: flex; /* Flexbox 사용 */
+            justify-content: center; /* 중앙 정렬 */
+            align-items: center; /* 수직 정렬 */
+        }
+
+
+
+        .lnb {
+            width: 120px;
+            background: #333;
+            color: white;
+            padding: 20px;
+            position: fixed;
+            height: calc(100vh - 40px); /* 수정된 부분: 헤더 높이를 제외한 높이 */
+            left: -250px;
+            transition: left 0.3s ease;
+            z-index: 1000;
+            top: 40px; /* 헤더 아래로 위치 조정 */
+        }
+
+        .lnb.active {
+            left: 0;
+        }
+
+        .menu-toggle {
+            background: rgba(51, 51, 51, 0.8);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            z-index: 1100;
+            border-radius: 5px;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+            margin-left: 0;
+            margin-top: 60px; /* 헤더 높이만큼 여백 추가 */
+            transition: margin-left 0.3s ease;
+        }
+
+        .content.shift {
+            margin-left: 130px;
+        }
+
+        .test{
+            border-radius: 15px;
+            padding: 5%;
+            border-top: 2px solid var(--blue900);
+            border-right: 2px solid var(--blue900);
+            border-left: 2px solid var(--blue900);
+            border-bottom: 2px solid var(--blue900);
+            z-index: 0;
+            background-color: var(--white);
+            font-weight: 500;
+            color: var(--blue900)
+        }
+
+        .content .title {
+            margin-bottom: 30px;
+            font-size: var(--t1-font-size);
+            font-weight: 500;
+            line-height: var(--t1-line-height)
+        }
+
+        .content .title2 {
+            margin-bottom: 30px;
+            font-size: var(--t4-font-size);
+            font-weight: 500;
+            line-height: var(--t4-line-height)
+        }
+
+    
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <button class="menu-toggle btn tertiary sm">☰</button>
+        <h2>FIN-TIME 마이페이지</h2>
+        <button class="btn tertiary sm" onclick="history.back()">뒤로가기</button>
+    </header>
+
+    <nav class="lnb">
+        <h1>LNB</h1>
+        <ul>
+            <ul class="depth2">
+                <li><a class="depth3" href="#" onclick="" data-page="menu1">메뉴1</a></li>
+            </ul>
+            <ul class="depth2">
+                <li><a class="depth3" href="#" onclick="" data-page="menu2">메뉴2</a></li>
+            </ul>
+        </ul>
+    </nav>
+
+    <main class="content" id="main-content">
+        <h2 class="title">정보 관리</h2>
+        <div class="test">
+            <h3>ID</h3>
+            <div class="input-wrap sm">
+                <input id="userID" class="input" placeholder="기관번호를 입력 해 주세요" onfocus="FocusInput('userID')" oninput="ChangeInput('userID')" onblur="BlurInput('userID')" value="" required="" disabled>
+                <span class="delete-btn" onclick="DeleteInput('userID')"></span>
+            </div>
+            
+            <h3>고객명</h3>
+            <div class="input-wrap sm">
+                <input id="userNm" class="input" placeholder="기관번호를 입력 해 주세요" onfocus="FocusInput('userNm')" oninput="ChangeInput('userNm')" onblur="BlurInput('userNm')" value="" required="">
+                <span class="delete-btn" onclick="DeleteInput('userNm')"></span>
+            </div>
+
+            <h3>전화번호</h3>
+            <div class="input-wrap sm">
+                <input id="user_telNo" class="input" placeholder="기관번호를 입력 해 주세요" onfocus="FocusInput('user_telNo')" oninput="ChangeInput('user_telNo')" onblur="BlurInput('user_telNo')" value="" required="">
+                <span class="delete-btn" onclick="DeleteInput('user_telNo')"></span>
+            </div>
+
+            <h3>주소</h3>
+            <div class="input-wrap sm">
+                <input id="user_address_1" class="input" placeholder="기관번호를 입력 해 주세요" disabled>
+                <span class="delete-btn" onclick="DeleteInput('user_address')"></span>
+                <button onclick="daumAPI()">우편번호 찾기</button>
+            </div>
+            <div class="input-wrap sm">
+                <input id="user_address_2" class="input" placeholder="기관번호를 입력 해 주세요" onfocus="FocusInput('user_address_2')" oninput="ChangeInput('user_address_2')" onblur="BlurInput('user_address_2')" value="" required="">
+                <span class="delete-btn" onclick="DeleteInput('user_address_2')"></span>
+            </div>
+        </div>
+        <br>
+        <div id="pw_container"class="test">
+            <form id="pwForm">
+            <h3 class="title2">[비밀번호 변경]</h3>
+            <h3>현재 비밀번호</h3>
+            <div class="input-wrap sm">
+                <input id="now_password" type="password" class="input" placeholder="현재 비밀번호" autocomplete="new-now_password" onfocus="FocusInput('now_password')" oninput="ChangeInput('now_password')" onblur="BlurInput('now_password')" value="" >
+                <span class="delete-btn" onclick="DeleteInput('now_password')"></span>
+            </div>
+
+            <h3>새로운 비밀번호</h3>
+            <div class="input-wrap sm">
+                <input id="new_password" type="password" class="input" placeholder="새로운 비밀번호" autocomplete="new-password" onfocus="FocusInput('new_password')" oninput="ChangeInput('new_password')" onblur="BlurInput('new_password')" value="" >
+                <span class="delete-btn" onclick="DeleteInput('new_password')"></span>
+            </div>
+
+            <h3>새로운 비밀번호 확인</h3>
+            <div class="input-wrap sm">
+                <input id="check_password" type="password" class="input" placeholder="새로운 비밀번호 확인" autocomplete="new-check_password" onfocus="FocusInput('check_password')" oninput="ChangeInput('check_password')" onblur="BlurInput('check_password')" value="" >
+                <span class="delete-btn" onclick="DeleteInput('check_password')"></span>
+                <button id="checkPassBtn" type="button">확인</button>
+            </div>
+        </form>
+        </div>
+    </form>
+    </main>
+
+    <footer id="saveBtn" class="footer">저장</footer>
+    <script>
+
+        chkflag = false
+
+        $("#saveBtn").on("click", (e) => {
+            if(!flag){
+                values = `<p>새로운 비밀번호 확인 하고 하셈</p>`
+                OpenModal('확인', "", true, "", "", "확인", "", "", "xs", values)
+            } else {
+                target = {}
+                $("#main-conten input").each(function() { 
+                    target[$(this).attr("id")] = $(this).val();
+                });
+                $.ajax({
+                            url: "{{api_domain}}/checkPw",  // API 엔드포인트
+                            type: "POST",
+                            contentType: "application/json",
+                            dataType: "json",
+                            data: JSON.stringify(target),
+                            success: function (response) {
+                                console.log(response)
+                            },
+                            error: function (xhr, error, status) {
+                                console.log('eventMst error', error);
+                            }
+                        });
+
+            }
+
+        });
+
+        $("#checkPassBtn").on("click", (e) => {
+            $("#new_password").val() == $("#check_password").val() ? 
+            chkflag= true :  ""
+            values = `<p>${chkflag ? "맞음" : "틀림"}</p>`
+            OpenModal('확인', "", true, "", "", "확인", "", "", "xs", values)
+        });
+
+        
+
+
+        //다음 우편번호 API
+        function daumAPI(){
+            new daum.Postcode({
+                oncomplete: function(data) {    
+                    console.log(data)
+                    $("#user_address_1").val(data.address)
+                }
+            }).open();
+        }
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+        const toggleButton = document.querySelector(".menu-toggle");
+        const lnb = document.querySelector(".lnb");
+        const content = document.querySelector(".content");
+
+        toggleButton.addEventListener("click", () => {
+            lnb.classList.toggle("active");
+            content.classList.toggle("shift");
+
+            if (lnb.classList.contains("active")) {
+                toggleButton.style.left = "260px";
+            } else {
+                toggleButton.style.left = "15px";
+            }
+        });
+
+        document.querySelectorAll(".lnb a").forEach(link => {
+            link.addEventListener("click", (event) => {
+                event.preventDefault();
+                const page = event.target.dataset.page;
+                loadContent(page);
+            });
+        });
+
+        function loadContent(page) {
+            const mainContent = document.getElementById("main-content");
+            let contentHTML = "";
+
+            if (page === "home") {
+                contentHTML = `<h1>홈</h1><p>여기가 기본 페이지입니다.</p>`;
+            } else if (page === "menu1") {
+                contentHTML = `<h1>메뉴 1</h1><p>메뉴 1의 내용입니다.</p>`;
+            } else if (page === "menu2") {
+                contentHTML = `<h1>메뉴 2</h1><p>메뉴 2의 내용입니다.</p>`;
+            }
+
+            mainContent.innerHTML = contentHTML;
+        }
+        
+    </script>
+
+</body>
+</html>

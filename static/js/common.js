@@ -3,6 +3,11 @@ function generateSHA256(input) {
     return CryptoJS.SHA256(input).toString(CryptoJS.enc.Hex);
 }
 
+//페이지 이동
+function goTopage(target){
+  window.location.href = "/" + $(target).attr("id").replace("Btn","")
+}
+
 //ESC시 Modal창 닫기
 function escCloseModal() {
     document.addEventListener("keydown", function (event) {
@@ -74,4 +79,43 @@ function OpenModal(
           : ""
       }
       </div></div>`);
+}
+
+
+
+//인풋 입력시
+function ChangeInput(id) {
+  if ($(`#${id}`).val().length > 0) {
+    $(`#${id}`).next($(".delete-btn")).show();
+  } else {
+    $(`#${id}`).next($(".delete-btn")).hide();
+  }
+}
+
+// 인풋 포커스시
+function FocusInput(id) {
+  if ($(`#${id}`).prop('tagName') == 'TEXTAREA') {
+    $(`#${id}`).css("border-color", "var(--blue900)");
+  }
+  $(".input-wrap").css("border-color", "var(--grey250)");
+  $(`#${id}`).parent().css("border-color", "var(--blue900)");
+}
+
+// 인풋 포커스 해제시
+function BlurInput(id) {
+  const timer = setTimeout(() => {
+    if (!$(".input").is(":focus")) {
+      $(`#${id}`).parent().css("border-color", "var(--grey200)");
+    } else {
+      $(`#${id}`).css("border-color", "var(--grey200)");
+    }
+    clearTimeout(timer);
+  }, 10);
+}
+
+// 인풋 value 삭제버튼
+function DeleteInput(id) {
+  $(`#${id}`).focus();
+  $(`#${id}`).val("");
+  $(`#${id}`).next($(".delete-btn")).hide();
 }

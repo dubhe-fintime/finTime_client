@@ -797,6 +797,10 @@
     -o-border-radius: 16px;
 }
 
+.modal.xs {
+    max-width: 250px
+}
+
 .modal.sm {
     max-width: 500px
 }
