@@ -234,27 +234,6 @@
                 ],
                 datesSet: function(info) {
                     markHolidays();
-                    /**
-                    holidays.forEach(function(holiday) {                    
-                        // holiday.date를 "2025년 1월 1일" 형식으로 변환
-                        
-                        const formattedDate = holiday.date.replace(/(\d{4})(\d{2})(\d{2})/, '$1년 $2월 $3일').replace(/0(\d)월/, '$1월').replace(/0(\d)일/, '$1일');
-
-                        console.log(formattedDate);
-                        // aria-label 속성값으로 날짜 찾기
-                        console.log(">> info.view.el >> " + info.view.el);
-                        const dayElement = $(info.view.el).find('.fc-daygrid-day-number').filter(function() {
-                            // a 태그의 aria-label 속성값을 기준으로 비교
-                            console.log(">>>>>" + $(this).attr('aria-label'));
-                            return $(this).attr('aria-label').includes(formattedDate);
-                        });
-
-                        if (dayElement.length) {
-                            // 공휴일 이름을 표시할 span 요소 추가
-                            dayElement.append('<span class="holiday-label">' + holiday.name + '</span>');
-                        }
-                    });
-                    */
                 },
                 eventClick: function(info) {
                     // 클릭한 이벤트 정보
