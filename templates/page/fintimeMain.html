@@ -142,24 +142,25 @@
         .fc-header-toolbar {
             background-color: #f8f9fa; /* 연한 배경색 */
             padding: 10px;
-            border-radius: 8px; /* 둥글게 */
+            border-radius: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* 약간의 그림자 */
         }
 
         /* 🔹 기본 버튼 스타일 */
         .fc .fc-button {
-            background-color: #007bff; /* 파란색 */
+            background-color: #007bff; /* 기본 파란색 */
             color: white !important;
             border: none;
-            padding: 8px 12px;
+            padding: 8px 14px;
             font-size: 14px;
             border-radius: 6px; /* 둥근 버튼 */
             cursor: pointer;
             transition: all 0.3s ease;
-            margin: 0 4px; /* 버튼 간격 */
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* 약간의 그림자 */
+            margin: 0 5px; /* 버튼 간격 */
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         /* 🔹 버튼 호버 효과 */
@@ -202,18 +203,29 @@
         .fc .fc-listMonth-button {
             background-color: #17a2b8 !important; /* 청록색 */
             color: white !important;
+            font-size: 14px;
+            font-weight: bold;
+            padding: 8px 14px;
+            border-radius: 6px;
+            transition: all 0.3s ease;
         }
 
         /* 🔹 View 버튼 활성화 시 강조 */
         .fc .fc-button-active {
             background-color: #117a8b !important;
             font-weight: bold;
+            border: 2px solid white;
         }
 
         /* 🔹 버튼 컨테이너 정렬 */
         .fc .fc-toolbar-chunk {
             display: flex;
             align-items: center;
+        }
+
+        /* 🔹 버튼 간격 조정 */
+        .fc .fc-toolbar-chunk:first-child {
+            margin-right: auto;
         }
 
     </style>
