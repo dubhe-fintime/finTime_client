@@ -107,7 +107,7 @@ def adminLogin():
     return render_template("page/index.html", domain=front_domain, api_domain=api_domain)
 
 @app.route("/main")
-def Main():
+def main():
     #return render_template("common/login.html", domain=domain, port=port)
     return render_template("page/fintimeMain.html", domain=front_domain, api_domain=api_domain)
 

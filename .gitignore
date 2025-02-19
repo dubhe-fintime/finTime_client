@@ -8,3 +8,4 @@ __pycache__/
 logs/
 
 config_development.ini
+.lh
