@@ -350,8 +350,8 @@
                                     start: startDate, // ISO 형식 (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss)
                                     end: endDate || startDate, // 종료 날짜 없으면 시작 날짜로 설정
                                     description: event.evt_dt_link || "No description",
-                                    backgroundColor: getColor(event.cor_no),
-                                    borderColor: getColor(event.cor_no),
+                                    backgroundColor: event.cor_color,
+                                    borderColor: event.cor_color,
                                     textColor: "white"
                                 };
                             });
@@ -454,15 +454,6 @@
         function closeSidebar() {
             document.getElementById('eventSidebar').style.right = "-1000px";
         }
-
-        function getColor(cor_no) {
-            switch (cor_no) {
-                default:
-                    return '#' + Math.floor(Math.random() * 16777215).toString(16);
-            }
-        }
-
-
     </script>
 
 </body>
