@@ -138,74 +138,63 @@
             color: black !important;  /* '더보기' 텍스트 색상 검은색 */
         }
         
-        /* 🔹 FullCalendar 헤더 스타일 */
+        /* 🔹 FullCalendar 헤더 스타일 (반응형 포함) */
         .fc-header-toolbar {
-            background-color: #f8f9fa; /* 연한 배경색 */
+            background-color: #f8f9fa;
             padding: 10px;
             border-radius: 8px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1); /* 약간의 그림자 */
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+            flex-wrap: nowrap; /* 한 줄로 배치 (줄 바꿈 안됨) */
         }
 
         /* 🔹 기본 버튼 스타일 */
         .fc .fc-button {
-            background-color: #007bff; /* 기본 파란색 */
+            background-color: #007bff;
             color: white !important;
             border: none;
-            padding: 8px 14px;
-            font-size: 14px;
-            border-radius: 6px; /* 둥근 버튼 */
+            padding: 6px 10px; /* 버튼 크기 줄이기 */
+            font-size: 12px; /* 글자 크기 축소 */
+            border-radius: 6px;
             cursor: pointer;
             transition: all 0.3s ease;
-            margin: 0 5px; /* 버튼 간격 */
+            margin: 0 5px;
             box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
-        }
-
-        /* 🔹 버튼 호버 효과 */
-        .fc .fc-button:hover {
-            background-color: #0056b3; /* 더 진한 파란색 */
         }
 
         /* 🔹 today 버튼 스타일 */
         .fc .fc-today-button {
-            background-color: #28a745 !important; /* 초록색 */
+            background-color: #28a745 !important;
             color: white !important;
-        }
-
-        /* 🔹 today 버튼 비활성화 스타일 */
-        .fc .fc-today-button.fc-button-disabled {
-            background-color: #d6d8db !important;
-            color: #6c757d !important;
-            cursor: not-allowed;
         }
 
         /* 🔹 prev, next 버튼 스타일 (사이즈 통일 & 원형 버튼) */
         .fc .fc-prev-button,
         .fc .fc-next-button {
-            background-color: #6c757d !important; /* 회색 */
+            background-color: #6c757d !important;
             color: white !important;
-            border-radius: 50%; /* 원형 */
-            width: 36px !important;
-            height: 36px !important;
-            min-width: 36px !important;
-            min-height: 36px !important;
+            border-radius: 50%;
+            width: 30px !important;
+            height: 30px !important;
+            min-width: 30px !important;
+            min-height: 30px !important;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px !important;
+            font-size: 16px !important;
             padding: 0 !important;
         }
 
         /* 🔹 View 전환 버튼 (dayGridMonth, listMonth) */
         .fc .fc-dayGridMonth-button,
         .fc .fc-listMonth-button {
-            background-color: #17a2b8 !important; /* 청록색 */
+            background-color: #17a2b8 !important;
             color: white !important;
-            font-size: 14px;
+            font-size: 12px; /* 글자 크기 축소 */
             font-weight: bold;
-            padding: 8px 14px;
+            padding: 6px 10px; /* 버튼 크기 줄이기 */
             border-radius: 6px;
             transition: all 0.3s ease;
         }
@@ -217,7 +206,7 @@
             border: 2px solid white;
         }
 
-        /* 🔹 버튼 컨테이너 정렬 */
+        /* 🔹 버튼 간격 조정 */
         .fc .fc-toolbar-chunk {
             display: flex;
             align-items: center;
@@ -227,6 +216,41 @@
         .fc .fc-toolbar-chunk:first-child {
             margin-right: auto;
         }
+
+        /* 🔹 모바일 화면에서 버튼 크기 및 정렬 조정 */
+        @media (max-width: 768px) {
+            .fc-header-toolbar {
+                padding: 8px 15px; /* 모바일에서 헤더 여백 조정 */
+            }
+
+            /* 버튼 크기 조정 */
+            .fc .fc-button {
+                padding: 5px 8px; /* 버튼 크기 더 줄이기 */
+                font-size: 10px; /* 글자 크기 더 줄이기 */
+                margin: 0 4px;
+            }
+
+            .fc .fc-prev-button,
+            .fc .fc-next-button {
+                width: 28px !important;
+                height: 28px !important;
+                font-size: 14px !important;
+            }
+
+            .fc .fc-today-button {
+                font-size: 10px !important;
+                padding: 5px 8px !important;
+            }
+
+            /* 버튼들을 한 줄로 배치 */
+            .fc .fc-toolbar-chunk {
+                width: auto;
+                display: flex;
+                justify-content: center;
+            }
+        }
+
+
 
     </style>
 </head>
