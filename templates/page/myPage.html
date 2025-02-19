@@ -207,7 +207,7 @@
         chkflag = false
 
         $("#saveBtn").on("click", (e) => {
-            if(!flag){
+            if(!chkflag){
                 values = `<p>새로운 비밀번호 확인 하고 하셈</p>`
                 OpenModal('확인', "", true, "", "", "확인", "", "", "xs", values)
             } else {
