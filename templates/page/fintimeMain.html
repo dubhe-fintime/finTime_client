@@ -150,6 +150,16 @@
             flex-wrap: nowrap; /* 한 줄로 배치 (줄 바꿈 안됨) */
         }
 
+        /* 🔹 FullCalendar 타이틀 스타일 */
+        .fc-toolbar-title {
+            font-size: 16px !important; /* 타이틀 폰트 크기 줄이기 */
+            font-weight: bold;
+            color: #333; /* 폰트 색상 */
+            text-align: center; /* 타이틀을 가운데 정렬 */
+            margin: 0;
+            padding: 5px;
+        }
+
         /* 🔹 기본 버튼 스타일 */
         .fc .fc-button {
             background-color: #007bff;
@@ -221,6 +231,10 @@
         @media (max-width: 768px) {
             .fc-header-toolbar {
                 padding: 8px 15px; /* 모바일에서 헤더 여백 조정 */
+            }
+
+            .fc-toolbar-title {
+                font-size: 14px !important; /* 모바일에서 타이틀 폰트 크기 더 작게 */
             }
 
             /* 버튼 크기 조정 */
