@@ -111,6 +111,23 @@
 .fc-daygrid-more-link,
 .fc-more-link {
     color: black !important;
+    font-size: 12px; /* 기본 폰트 크기 */
+    font-weight: bold;
+}
+
+/* 📌 반응형 적용 (768px 이하 태블릿 & 모바일) */
+@media (max-width: 768px) {
+    .fc-daygrid-more-link,
+    .fc-more-link {
+        font-size: 10px; /* 태블릿 & 모바일에서 폰트 크기 줄이기 */
+    }
+}
+
+@media (max-width: 480px) {
+    .fc-daygrid-more-link,
+    .fc-more-link {
+        font-size: 8px; /* 스마트폰에서 더 작게 */
+    }
 }
 
 /*****************************************

@@ -137,18 +137,6 @@
                     document.getElementById('eventSidebar').style.right = "0px";
                 },
                 eventDidMount: function(info) {
-                    const eventSidebar = document.getElementById('eventSidebar');
-    
-                    // 현재 사이드바의 `right` 값을 가져오기
-                    const sidebarRight = window.getComputedStyle(eventSidebar).right;
-
-                    console.log(sidebarRight);
-
-                    // 사이드바가 열려있으면 popover를 닫지 않음
-                    if (sidebarRight === "0px") {
-                        return;
-                    }
-
                     // 팝오버 외부 클릭 시 팝오버 닫기 이벤트 추가
                     const popover = info.el.querySelector('.fc-popover');
                     if (popover) {
