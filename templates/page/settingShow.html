@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIN-TIME | MYPAGE </title>
+    <script src="{{ url_for('static', filename='js/crypto-js.js') }}"></script>
+    <link href="{{ url_for('static', filename='style/common.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='style/lnb.css') }}" rel="stylesheet" />
+    <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            min-height: 100vh;
+            overflow-y: scroll; /* body 부분만 스크롤 가능 */
+            height: 100vh; /* body 높이 지정 */
+        }
+
+        .header {
+            background: var(--blue900);
+            color: white;
+            padding: 10px 20px;
+            width: 100%;
+            position: fixed; /* 고정된 헤더 */
+            top: 0;
+            z-index: 1200; /* 다른 요소 위로 */
+            display: flex; /* Flexbox 사용 */
+            justify-content: space-between; /* 좌우 정렬 */
+            align-items: center; /* 수직 정렬 */
+        }
+
+        .footer {
+            background: var(--blue900);
+            color: white;
+            padding: 10px 20px;
+            width: 100%;
+            position: fixed; /* 고정된 푸터 */
+            bottom: 0; /* 아래쪽 고정 */
+            z-index: 1200; /* 다른 요소 위로 */
+            display: flex; /* Flexbox 사용 */
+            justify-content: center; /* 중앙 정렬 */
+            align-items: center; /* 수직 정렬 */
+        }
+
+
+
+        .lnb {
+            width: 120px;
+            background: #333;
+            color: white;
+            padding: 20px;
+            position: fixed;
+            height: calc(100vh - 40px); /* 수정된 부분: 헤더 높이를 제외한 높이 */
+            left: -250px;
+            transition: left 0.3s ease;
+            z-index: 1000;
+            top: 40px; /* 헤더 아래로 위치 조정 */
+        }
+
+        .lnb.active {
+            left: 0;
+        }
+
+        .menu-toggle {
+            background: rgba(51, 51, 51, 0.8);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            z-index: 1100;
+            border-radius: 5px;
+        }
+
+        .content {
+            flex: 1;
+            padding: 20px;
+            margin-left: 0;
+            margin-top: 60px; /* 헤더 높이만큼 여백 추가 */
+            transition: margin-left 0.3s ease;
+        }
+
+        .content.shift {
+            margin-left: 130px;
+        }
+
+        .test{
+            border-radius: 15px;
+            padding: 5%;
+            border-top: 2px solid var(--blue900);
+            border-right: 2px solid var(--blue900);
+            border-left: 2px solid var(--blue900);
+            border-bottom: 2px solid var(--blue900);
+            z-index: 0;
+            background-color: var(--white);
+            font-weight: 500;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .content .title {
+            margin-bottom: 30px;
+            font-size: var(--t1-font-size);
+            font-weight: 500;
+            line-height: var(--t1-line-height)
+        }
+
+        .content .title2 {
+            margin-bottom: 30px;
+            font-size: var(--t4-font-size);
+            font-weight: 500;
+            line-height: var(--t4-line-height)
+        }
+
+    
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <button class="menu-toggle btn tertiary sm">☰</button>
+        <h2>FIN-TIME 마이페이지</h2>
+        <button class="btn tertiary sm" onclick="history.back()">뒤로가기</button>
+    </header>
+
+    <nav class="lnb">
+        <h1>LNB</h1>
+        <ul>
+            <ul class="depth2">
+                <li><a id="setShowBtn" class="depth3" href="#" onclick="goTopage(this)" data-page="menu1">캘린더 설정</a></li>
+            </ul>
+            <ul class="depth2">
+                <li><a class="depth3" href="#" onclick="" data-page="menu2">메뉴2</a></li>
+            </ul>
+        </ul>
+    </nav>
+
+    <main class="content" id="main-content">
+        <h2 class="title">캘린더 설정</h2>
+
+        <div class="test">
+
+        <div class="select-box sm" style="margin-left: 16px;" >
+            <strong class="label" onclick="ClickSelectLabel('corGp')" id="corGp" name="">전체</strong>
+            <ul class="options type" style="display: none;">
+              <li class="option corGp" onclick="ClickSelectOption('corGp','전체','')">
+                전체
+              </li>
+              <li class="option corGp" onclick="ClickSelectOption('corGp','은행','001')">
+                은행
+              </li>
+              <li class="option corGp" onclick="ClickSelectOption('corGp','증권','002')">
+                증권
+              </li>
+              <li class="option corGp" onclick="ClickSelectOption('corGp','카드','003')">
+                카드
+              </li>
+              <li class="option corGp" onclick="ClickSelectOption('corGp','보험','004')">
+                보험
+              </li>
+            </ul>
+          </div>
+          <div class="select-box sm" style="margin-left: 16px;">
+            <strong class="label" onclick="ClickSelectLabel('corGp_2')" id="corGp_2" name="">전체</strong>
+            <ul id="corGp_2_body" class="options type" style="display: none;"></ul>
+          </div>
+        </div>
+        </div>
+        <table class="table intent-table">
+            <caption>
+                대분류만 선택했을 경우
+            </caption>
+            <colgroup>
+                <col width="80px">
+                <col>
+            </colgroup>
+            <thead class="thead type2"></thead>
+            <tbody id="dataContent_1" class="tbody"></tbody>
+            <tbody id="dataContent_2" class="tbody"></tbody>
+        </table>
+    </main>
+
+    <footer id="saveBtn" onclick="saveSetting()" class="footer">저장</footer>
+    <script>
+
+        var total_data
+        var id = localStorage.getItem('id')
+        
+        $(document).ready(function () {
+            getList()
+        })
+
+        function getList(){
+            $.ajax({
+                    url: "{{api_domain}}/getSetting",  // API 엔드포인트
+                    type: "POST",
+                    contentType: "application/json",
+                    dataType: "json",
+                    data: JSON.stringify({"id":id}),
+                    success: function (response) {
+                        total_data=response;
+                        var uniqueData = total_data
+                        .reduce((acc, current) => {
+                            if (!acc.some(item => item.cor_no == current.cor_no)) {
+                                acc.push(current);
+                            }
+                            return acc;}, []).sort((a, b) => a.cor_no - b.cor_no);
+                            console.log(uniqueData)
+
+                            var cor_table = ""
+                            var evt_table = ""
+                            var li_value = ""
+
+                            //대분류 테이블 
+                            uniqueData.forEach((v,i)=>{
+                                cor_table += `<tr data-id="${v.cor_no}" data-group="${v.cor_gp}"><td> `
+                                if(v.group_yn == "N"){
+                                    cor_table += `<input id="${v.cor_no}" type="checkbox" class="checkbox" flag="${v.group_yn}">
+                                    <label for="${v.cor_no}" class="checkbox-label checked" onclick="ChangeCheckBox2('${v.cor_no}')">체크</label></td> `
+
+                                } else {
+                                    cor_table += `<input id="${v.cor_no}" type="checkbox" class="checkbox" flag="${v.group_yn}">
+                                    <label for="${v.cor_no}" class="checkbox-label" onclick="ChangeCheckBox2('${v.cor_no}')">체크</label></td>`
+
+                                }
+                                cor_table +=`<td>${v.cor_nm}</td></tr>`
+
+                                li_value = `<li class="option corGp2" onclick="ClickSelectOption('corGp_2','${v.cor_nm}','${v.cor_no}')">${v.cor_nm}</li>` 
+                        })
+
+                            //이벤트 테이블 
+                            total_data.forEach((v,i)=>{
+                                evt_table += `<tr data-group="${v.cor_no}""><td> `
+                                if(v.evt_user_yn == "N"){
+                                    evt_table += `<input id="${v.evt_id}" type="checkbox" class="checkbox" flag="${v.evt_user_yn}">
+                                    <label for="${v.evt_id}" class="checkbox-label checked" onclick="ChangeCheckBox2('${v.evt_id}')">체크</label></td> `
+
+                                }else {
+                                    evt_table += `<input id="${v.evt_id}" type="checkbox" class="checkbox" flag="${v.evt_user_yn}">
+                                    <label for="${v.evt_id}" class="checkbox-label" onclick="ChangeCheckBox2('${v.evt_id}')">체크</label></td> `
+
+                                }
+                                    evt_table +=`<td>${v.evt_title}</td></tr>`
+                        })
+                        $("#dataContent_2").hide()
+                        $("#dataContent_2").append(evt_table)    
+
+                        $("#dataContent_1").append(cor_table)    
+                        $("#dataContent_1").show()
+
+                        $("#corGp_2_body").append(li_value)
+                    },
+                    error: function (xhr, error, status) {
+                        console.log('eventMst error', error);
+                    }
+                });
+        }
+
+        //대분류 버튼 
+        $(".corGp").on("click", function() {
+            ClickSelectOption('corGp_2','전체','')
+            let strongName = $(this).closest(".select-box").find("strong").attr("name")
+            if(!strongName){$("#dataContent_1 tr").show()}
+
+            $("#dataContent_1 tr").each(function() {
+                if ($(this).data("group") === strongName) {
+                    $(this).show(); // data-group이 1인 경우 보여줌
+                } else {
+                    $(this).hide(); // 그 외의 경우 숨김
+                }
+            });
+
+            var uniqueData = total_data
+                .filter((data) => data.cor_gp == strongName) 
+                .reduce((acc, current) => {
+                    if (!acc.some(item => item.cor_no == current.cor_no)) {
+                        acc.push(current);
+                    }
+                    return acc;
+                }, []);
+
+            var li_value = ""
+            uniqueData.forEach((v,i)=>{
+                li_value += `<li class="option corGp2" onclick="ClickSelectOption('corGp_2','${v.cor_nm}','${v.cor_no}')">${v.cor_nm}</li>` 
+            })
+
+            $("#corGp_2_body").empty()
+            $("#corGp_2_body").append(li_value)
+            evt_showHide()
+        });
+
+
+        function evt_showHide(){
+            $(".corGp2").on("click", function() {
+                let strongName = $(this).closest(".select-box").find("strong").attr("name")
+                if(!strongName){$("#dataContent_2 tr").show()}
+                console.log(strongName)
+
+                $("#dataContent_2 tr").each(function() {
+                if ($(this).data("group") === strongName) {
+                    $(this).show(); // data-group이 1인 경우 보여줌
+                } else {
+                    $(this).hide(); // 그 외의 경우 숨김
+                }
+            });
+                
+                $("#dataContent_1").hide()
+                $("#dataContent_2").show()
+            })
+        }
+
+
+
+
+        function saveSetting(e){
+            cor_no = []
+            evt_no = []
+            $("#dataContent_1 input").each(function() {
+                if($(this).attr("flag") == "N"){
+                    cor_no.push($(this).attr("id"));
+                }
+            })
+
+            $("#dataContent_2 input").each(function() {
+                if($(this).attr("flag") == "N"){
+                    evt_no.push($(this).attr("id"));
+                }
+            })
+            cor_no = cor_no.join(",");
+            evt_no = evt_no.join(",");
+
+
+            dataObject = {
+                "id":id,
+                "cor_no":cor_no,
+                "evt_no":evt_no
+            }
+
+            $.ajax({
+            url: "{{api_domain}}/updateSetting",
+            type: "POST",
+            contentType: "application/json",
+            dataType: "json",
+            data: JSON.stringify(dataObject),
+            success: function (response) {
+                console.log(response)
+                debugger;
+                if (response[0] == "99999") {
+                    $('.login-area').css('z-index', 0)
+                    values = `<p>아이디 혹은 비밀번호를 확인해주세요.</p>`
+                    OpenModal('ID,PW 오류', "", true, "", "", "확인", "", "", "sm", values)
+                } else if (response[0] == "00000") {
+                    let values = `<p>보기 싫은 기관,이벤트 설정 완료되었습니다.</p>`;
+                    OpenModal("캘린더 설정", "", true, "", "location.reload()", "확인", "", true, "xs", values);
+                }
+            },
+            fail: function (response) {
+                values = `<p>접근 거부: 사용 여부 및 아이디 확인바람</p>`
+                OpenModal('ID,PW 오류', "", true, "", "", "확인", "", "", "sm", values)
+
+            }
+        })
+        }
+
+
+    </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+        const toggleButton = document.querySelector(".menu-toggle");
+        const lnb = document.querySelector(".lnb");
+        const content = document.querySelector(".content");
+
+        toggleButton.addEventListener("click", () => {
+            lnb.classList.toggle("active");
+            content.classList.toggle("shift");
+
+            if (lnb.classList.contains("active")) {
+                toggleButton.style.left = "260px";
+            } else {
+                toggleButton.style.left = "15px";
+            }
+        });
+
+        document.querySelectorAll(".lnb a").forEach(link => {
+            link.addEventListener("click", (event) => {
+                event.preventDefault();
+                const page = event.target.dataset.page;
+                loadContent(page);
+            });
+        });
+
+        function loadContent(page) {
+            const mainContent = document.getElementById("main-content");
+            let contentHTML = "";
+
+            if (page === "home") {
+                contentHTML = `<h1>홈</h1><p>여기가 기본 페이지입니다.</p>`;
+            } else if (page === "menu1") {
+                contentHTML = `<h1>메뉴 1</h1><p>메뉴 1의 내용입니다.</p>`;
+            } else if (page === "menu2") {
+                contentHTML = `<h1>메뉴 2</h1><p>메뉴 2의 내용입니다.</p>`;
+            }
+
+            mainContent.innerHTML = contentHTML;
+        }
+        
+    </script>
+
+</body>
+</html>

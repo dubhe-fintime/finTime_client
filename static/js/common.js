@@ -119,3 +119,72 @@ function DeleteInput(id) {
   $(`#${id}`).val("");
   $(`#${id}`).next($(".delete-btn")).hide();
 }
+
+
+//셀렉트박스 옵션 클릭시 (name 부여)
+function ClickSelectOption(id, option, name, name2 = undefined) {
+  if (id.includes('step')) {
+    $(`#${id}`).attr('data', option);
+  }
+  $(`#${id}`).text(option);
+  $(`#${id}`).attr('name', name);
+  $(`#${id}`).attr('data-id', name2);
+  $(`#${id}`).removeClass("on");
+  $(`#${id}`).next().hide();
+}
+
+//셀렉트박스 라벨 클릭시
+function ClickSelectLabel(id, id2) {
+  if ($(`#${id}`).next().is(":visible")) {
+    $(`#${id}`).removeClass("on");
+    $(`#${id}`).next().hide();
+  } else {
+    $(".label").removeClass("on");
+    $(`.options[data-id='${id}']`).not($(".options").hide());
+    $(`#${id}`).addClass("on");
+    $(`#${id}`).next().show();
+    //신규 카드 추가 -> 선택 항목 설정
+    $(`#${id2}`).text('유형 선택');
+  }
+}
+
+
+// 체크박스 클릭 (단일 체크만)
+function ChangeCheckBox(id) {
+  $(`input`).prop('checked', false)
+  $(".checked").removeClass('checked');
+
+  if (id === "allCheck") {
+    if ($(`#${id}`).next().hasClass("checked")) {
+      $(".checkbox-label").removeClass("checked");
+    } else {
+      $(".checkbox-label").addClass("checked");
+    }
+  } else {
+    $(`#${id}`).next().toggleClass("checked");
+    $(`input#${id}:input`).prop("checked", true)
+  }
+}
+
+// 체크박스 (다중 체크시)
+function ChangeCheckBox2(id) {
+  if (id === "allCheck") {
+    if ($(`#${id}`).next().hasClass("checked")) {
+      $(".checkbox-label").removeClass("checked");
+    } else {
+      $(".checkbox-label").addClass("checked");
+    }
+  } else {
+    if ($(`label[for="${id}"]`).hasClass('checked')) {
+      $(`label[for="${id}"]`).removeClass('checked')
+      $(`input#${id}:input`).prop("checked", false)
+      $(`input#${id}:input`).attr("flag", "Y")
+    }
+    else {
+      $(`#${id}`).next().toggleClass("checked");
+      $(`input#${id}:input`).prop("checked", true)
+      $(`input#${id}:input`).attr("flag", "N")
+    }
+  }
+  console.log($(`#${id}`).prop("checked"))
+}

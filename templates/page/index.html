@@ -166,6 +166,7 @@
                     values = `<p>아이디 혹은 비밀번호를 확인해주세요.</p>`
                     OpenModal('ID,PW 오류', "", true, "", "", "확인", "", "", "sm", values)
                 } else if (response[0] == "00000") {
+                    localStorage.setItem("id",dataObject.id)
                     window.location.href = "{{url_for('main')}}"
                 }
             },

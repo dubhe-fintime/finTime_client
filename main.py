@@ -116,11 +116,10 @@ def mypage():
     #return render_template("common/login.html", domain=domain, port=port)
     return render_template("page/myPage.html", domain=front_domain, api_domain=api_domain)
 
-@app.route("/mypage_depth1")
-def mypage_depth1():
-    
+@app.route("/setShow")
+def setShow():
     #return render_template("common/login.html", domain=domain, port=port)
-    return render_template("page/mypage_depth1.html", domain=front_domain, api_domain=api_domain)
+    return render_template("page/settingShow.html", domain=front_domain, api_domain=api_domain)
 
 if __name__ == "__main__": 
     while True:

@@ -134,7 +134,7 @@
         <h1>LNB</h1>
         <ul>
             <ul class="depth2">
-                <li><a class="depth3" href="#" onclick="" data-page="menu1">메뉴1</a></li>
+                <li><a id="setShowBtn" class="depth3" href="#" onclick="goTopage(this)" data-page="menu1">캘린더 설정</a></li>
             </ul>
             <ul class="depth2">
                 <li><a class="depth3" href="#" onclick="" data-page="menu2">메뉴2</a></li>
@@ -203,9 +203,13 @@
 
     <footer id="saveBtn" class="footer">저장</footer>
     <script>
-
         chkflag = false
 
+        $(document).ready(function () {
+            localStorage.getItem("id")
+        })
+
+        
         $("#saveBtn").on("click", (e) => {
             if(!chkflag){
                 values = `<p>새로운 비밀번호 확인 하고 하셈</p>`
@@ -235,7 +239,7 @@
 
         $("#checkPassBtn").on("click", (e) => {
             $("#new_password").val() == $("#check_password").val() ? 
-            chkflag= true :  ""
+            chkflag= true :  chkflag= false
             values = `<p>${chkflag ? "맞음" : "틀림"}</p>`
             OpenModal('확인', "", true, "", "", "확인", "", "", "xs", values)
         });
