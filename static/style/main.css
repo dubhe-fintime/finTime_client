@@ -1,0 +1,360 @@
+/*****************************************
+ * 🔹 1. 기본 레이아웃 스타일
+ *****************************************/
+
+/* 캘린더 기본 설정 */
+#calendar {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+/* 화면 크기에 따른 캘린더 크기 조정 */
+@media (max-width: 768px) {
+    #calendar {
+        width: 100%;
+        padding: 0 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    #calendar {
+        width: 100%;
+        padding: 0;
+    }
+}
+
+/*****************************************
+ * 🔹 2. 타이틀 바 스타일
+ *****************************************/
+
+#titlebar {
+    position: relative;
+    display: flex;
+    justify-content: center; /* h1을 중앙 정렬 */
+    align-items: center;
+    padding: 15px 20px; /* 높이 조절 */
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #ddd;
+    height: 30px;
+}
+
+/* 타이틀 스타일 */
+#titlebar h1 {
+    margin: 0;
+    font-size: 20px;
+    position: absolute; /* 가운데 고정 */
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* 버튼 스타일 */
+#titlebar button {
+    position: absolute;
+    right: 20px;
+    padding: 8px 12px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#titlebar button:hover {
+    background-color: #0056b3;
+}
+
+/*****************************************
+ * 🔹 3. FullCalendar 스타일
+ *****************************************/
+
+/* 🔸 달력 날짜 스타일 */
+.fc-daygrid-day-top {
+    display: flex;
+    justify-content: space-between; /* 날짜 왼쪽, 공휴일 오른쪽 */
+    align-items: center;
+    padding: 0 4px;
+}
+
+/* 🔸 공휴일 스타일 */
+.fc-daygrid-day-top.has-holiday .fc-daygrid-day-number,
+.fc-list-day.has-holiday .fc-list-day-text {
+    color: red !important;
+}
+
+.holiday-label {
+    font-size: 12px;
+    color: red;
+    white-space: nowrap;
+    text-align: left;
+    margin-right: auto;
+    margin-left: 4px;
+}
+
+/* 🔸 날짜 정렬 */
+.fc-daygrid-day-number {
+    flex-shrink: 0;
+    text-align: right;
+}
+
+/* 🔸 요일별 스타일 */
+.fc-day-sat {
+    background-color: white;
+    color: #007bff;
+}
+
+.fc-day-sun {
+    background-color: white;
+    color: #ff5733;
+}
+
+/* 🔸 '더보기' 링크 스타일 */
+.fc-daygrid-more-link,
+.fc-more-link {
+    color: black !important;
+    font-size: 12px; /* 기본 폰트 크기 */
+    font-weight: bold;
+}
+
+/* 📌 반응형 적용 (768px 이하 태블릿 & 모바일) */
+@media (max-width: 768px) {
+    .fc-daygrid-more-link,
+    .fc-more-link {
+        font-size: 10px; /* 태블릿 & 모바일에서 폰트 크기 줄이기 */
+    }
+}
+
+@media (max-width: 480px) {
+    .fc-daygrid-more-link,
+    .fc-more-link {
+        font-size: 8px; /* 스마트폰에서 더 작게 */
+    }
+}
+
+/* 🔹 더보기 팝오버 스타일 */
+.fc-popover {
+    z-index: 9999 !important;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+}
+
+/* 🔹 팝오버 헤더 스타일 */
+.fc-popover-header {
+    background: #007bff;
+    color: white;
+    font-weight: bold;
+    padding: 6px 10px;
+    border-radius: 6px 6px 0 0;
+}
+
+/* 🔹 팝오버 내부 일정 스타일 */
+.fc-popover-body .fc-daygrid-event {
+    padding: 5px;
+    font-size: 14px;
+}
+
+/* 🔹 '더보기' 버튼 스타일 */
+.fc-daygrid-more-link, 
+.fc-more-link {
+    display: flex;
+    justify-content: center; /* 가운데 정렬 */
+    align-items: center;
+    font-size: 12px; /* 모바일에서는 폰트 크기 줄이기 */
+    font-weight: bold;
+    text-align: center;
+    background: #f8f9fa;
+    padding: 4px 6px;
+    border-radius: 4px;
+}
+
+/* 🔹 반응형 - 모바일에서 팝오버 크기 조정 */
+@media (max-width: 768px) {
+    .fc-popover {
+        max-width: 90% !important;
+        left: 5% !important;
+    }
+
+    .fc-popover-body .fc-daygrid-event {
+        font-size: 12px;
+    }
+
+    .fc-daygrid-more-link, 
+    .fc-more-link {
+        font-size: 10px;
+        padding: 3px 5px;
+    }
+}
+
+
+/*****************************************
+ * 🔹 4. FullCalendar 헤더 및 버튼 스타일
+ *****************************************/
+
+/* 🔸 헤더 스타일 */
+.fc-header-toolbar {
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    flex-wrap: nowrap;
+}
+
+/* 🔸 타이틀 스타일 */
+.fc-toolbar-title {
+    font-size: 16px !important;
+    font-weight: bold;
+    color: #333;
+    text-align: center;
+    margin: 0;
+    padding: 5px;
+}
+
+/* 🔸 버튼 스타일 */
+.fc .fc-button {
+    background-color: #007bff;
+    color: white !important;
+    border: none;
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin: 0 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* 🔸 '오늘' 버튼 */
+.fc .fc-today-button {
+    background-color: #28a745 !important;
+    color: white !important;
+}
+
+/* 🔸 이전/다음 버튼 스타일 */
+.fc .fc-prev-button,
+.fc .fc-next-button {
+    background-color: #6c757d !important;
+    color: white !important;
+    border-radius: 50%;
+    width: 30px !important;
+    height: 30px !important;
+    min-width: 30px !important;
+    min-height: 30px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px !important;
+    padding: 0 !important;
+}
+
+/* 🔸 뷰 전환 버튼 스타일 */
+.fc .fc-dayGridMonth-button,
+.fc .fc-listMonth-button,
+.fc .fc-dayGridWeek-button {
+    background-color: #17a2b8 !important;
+    color: white !important;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 6px 10px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+/* 🔸 버튼 활성화 시 강조 */
+.fc .fc-button-active {
+    background-color: #117a8b !important;
+    font-weight: bold;
+    border: 2px solid white;
+}
+
+/*****************************************
+ * 🔹 5. 반응형 스타일 (모바일 최적화)
+ *****************************************/
+
+@media (max-width: 768px) {
+    .fc-header-toolbar {
+        padding: 8px 15px;
+    }
+
+    .fc-toolbar-title {
+        font-size: 14px !important;
+    }
+
+    .fc .fc-button {
+        padding: 5px 8px;
+        font-size: 10px;
+        margin: 0 4px;
+    }
+
+    .fc .fc-prev-button,
+    .fc .fc-next-button {
+        width: 28px !important;
+        height: 28px !important;
+        font-size: 14px !important;
+    }
+
+    .fc .fc-today-button {
+        font-size: 10px !important;
+        padding: 5px 8px !important;
+    }
+
+    .fc .fc-toolbar-chunk {
+        width: auto;
+        display: flex;
+        justify-content: center;
+    }
+}
+
+/*****************************************
+ * 🔹 6. 사이드바 & 팝오버 스타일
+ *****************************************/
+
+/* 🔸 사이드바 스타일 */
+#eventSidebar {
+    position: fixed;
+    top: 0;
+    right: -1000px;
+    width: 300px;
+    height: 100%;
+    background-color: white;
+    box-shadow: -2px 0 5px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    transition: right 0.3s ease-in-out;
+    z-index: 10000; /* 팝오버보다 높음 */
+    overflow-y: auto;
+}
+
+/* 🔸 팝오버 스타일 */
+.fc-popover {
+    z-index: 9000 !important;
+}
+
+/* 🔸 캘린더 기본 z-index */
+.fc { 
+    z-index: 500 !important;
+}
+
+/*****************************************
+ * 🔹 7. 이벤트 텍스트 크기 조정 (모바일 대응)
+ *****************************************/
+
+/* 기본 이벤트 텍스트 스타일 */
+.fc-event-main {
+    font-size: 12px; /* 기본 폰트 크기 */
+}
+
+/* 모바일 화면에서 이벤트 텍스트 크기 줄이기 */
+@media (max-width: 768px) {
+    .fc-event-main {
+        font-size: 10px !important; /* 모바일에서 폰트 크기 작게 */
+    }
+}
+
+@media (max-width: 480px) {
+    .fc-event-main {
+        font-size: 8px !important; /* 더 작은 화면에서는 더 줄이기 */
+    }
+}
