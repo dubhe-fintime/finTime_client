@@ -83,7 +83,7 @@
                 initialView: 'dayGridMonth',
                 headerToolbar: {
                     left: 'title prev,next today',
-                    right: 'dayGridMonth,listMonth'
+                    right: 'dayGridMonth,listMonth,dayGridWeek'
                 },
                 titleFormat: { 
                     year: 'numeric', 
@@ -160,7 +160,14 @@
                         listEventTimeElement.style.display = 'none'; // 시간 숨기기
                     }
                 },
-                dayMaxEvents: 5, 
+                views: {
+                    dayGridMonth: {  // month 뷰일 때
+                        dayMaxEvents: 5  // 한 날짜에 최대 3개 이벤트만 표시
+                    },
+                    dayGridWeek: {  // week 뷰일 때
+                        dayMaxEvents: false  // 제한 없이 모든 이벤트 표시
+                    }
+                },
                 moreLinkText: function(n) { // 더보기 텍스트 설정
                     return '더보기 (' + n + ')';
                 }
