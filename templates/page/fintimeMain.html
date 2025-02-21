@@ -34,7 +34,7 @@
     <!-- 사이드바 추가 -->
     <div class="eventBottom" id="eventSidebar">
         <div class="top">
-            <h4>Event Details</h4>
+            <h4>이벤트 상세</h4>
             <button class="close-btn" onclick="closeSidebar()">닫기</button>
         </div>
 
@@ -93,7 +93,6 @@
                     year: 'numeric', 
                     month: '2-digit'
                 },
-                locale: "ko",
                 eventSources: [
                     {
                         url: "{{api_domain}}/getEventMst",  // API 엔드포인트
@@ -130,6 +129,7 @@
                 eventClick: function(info) {
                     // 클릭한 이벤트 정보
                     const event = info.event;
+                    popoverElement = $(info.jsEvent.currentTarget);
 
                     // 사이드바 내용 업데이트
                     document.getElementById('sidebarEventTitle').textContent = event.title;
@@ -141,6 +141,18 @@
 
                     // 사이드바 열기
                     document.getElementById('eventSidebar').classList.add('active');
+                    
+                     // 팝오버 외부 클릭 시 사이드바 닫기 이벤트 추가
+                    const popover = info.el.querySelector('.fc-popover');
+                    if (popover) {
+                        console.log("여기!")
+                        document.addEventListener('click', function(event) {
+                            if (!popover.contains(event.target)) {
+                                popover.style.display = 'none'; // 팝오버 닫기
+                                closeSidebar(); // 사이드바 닫기 함수 호출
+                            }
+                        }, { once: true }); // 한 번만 실행되도록 설정
+                    }
                 },
                 eventDidMount: function(info) {
                     // 팝오버 외부 클릭 시 팝오버 닫기 이벤트 추가
@@ -224,6 +236,14 @@
         function closeSidebar() {
             document.getElementById('eventSidebar').classList.remove('active');
         }
+
+        //more -> 바텀시트 활성화 -> 다른곳 누르면 제거
+        $('body').on('click', function (e) {
+            // close the popover if: click outside of the popover || click on the close button of the popover
+            if (popoverElement && ((!popoverElement.is(e.target) && popoverElement.has(e.target).length === 0 && $('.popover').has(e.target).length === 0) || (popoverElement.has(e.target) && e.target.id === 'closepopover'))) {
+            closeSidebar();
+        }
+});
 
 
     </script>
