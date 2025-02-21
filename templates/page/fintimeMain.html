@@ -25,22 +25,26 @@
     <link rel="stylesheet" type="text/css" href="static/style/main.css" />
 </head>
 <body>
-    <div id="titlebar">
-        <h1>Fin-Time</h1>
-        <button id="mypageBtn"onclick="goTopage(this)">설정</button>
+    <div class="header" id="titlebar">
+        <h2>Fin-Time</h2>
+        <button class="btn tertiary sm" id="mypageBtn"onclick="goTopage(this)">설정</button>
     </div>
 
     <div id="calendar"></div>
     <!-- 사이드바 추가 -->
-    <div id="eventSidebar">
-        <h4>Event Details</h4>
-        <p><strong>Title:</strong> <span id="sidebarEventTitle"></span></p>
-        <p><strong>Start:</strong> <span id="sidebarEventStart"></span></p>
-        <p><strong>End:</strong> <span id="sidebarEventEnd"></span></p>
-        <p><strong>Detail Link:</strong> <span id="sidebarEventDescription"></span></p>
-        <button onclick="closeSidebar()">Close</button>
-    </div>
+    <div class="eventBottom" id="eventSidebar">
+        <div class="top">
+            <h4>Event Details</h4>
+            <button class="close-btn" onclick="closeSidebar()">닫기</button>
+        </div>
 
+        <div class="contents">
+            <p class="contents-p"><strong>Title:</strong> <span id="sidebarEventTitle"></span></p>
+            <p class="contents-p"><strong>Start:</strong> <span id="sidebarEventStart"></span></p>
+            <p class="contents-p"><strong>End:</strong> <span id="sidebarEventEnd"></span></p>
+            <p class="contents-p"><strong>Detail Link:</strong> <span id="sidebarEventDescription"></span></p>
+        </div>
+    </div>
     <script>
         let holidayModified = false; // 제목이 수정되었는지 확인하는 플래그
         let holidays = []; // 공휴일 데이터
@@ -89,6 +93,7 @@
                     year: 'numeric', 
                     month: '2-digit'
                 },
+                locale: "ko",
                 eventSources: [
                     {
                         url: "{{api_domain}}/getEventMst",  // API 엔드포인트
@@ -109,7 +114,8 @@
                                     description: event.evt_dt_link || "No description",
                                     backgroundColor: event.cor_color,
                                     borderColor: event.cor_color,
-                                    textColor: "white"
+                                    textColor: "white",
+                                    className: 'blur-effect'
                                 };
                             });
                         },
@@ -134,7 +140,7 @@
                         : 'No Link';
 
                     // 사이드바 열기
-                    document.getElementById('eventSidebar').style.right = "0px";
+                    document.getElementById('eventSidebar').classList.add('active');
                 },
                 eventDidMount: function(info) {
                     // 팝오버 외부 클릭 시 팝오버 닫기 이벤트 추가
@@ -169,7 +175,7 @@
                     }
                 },
                 moreLinkText: function(n) { // 더보기 텍스트 설정
-                    return '더보기 (' + n + ')';
+                    return 'more +  ' + n ;
                 }
             });
             calendar.render();
@@ -199,7 +205,7 @@
 
                         // 달력 뷰 처리
                         if (el.classList.contains('fc-daygrid-day-top')) {
-                            el.insertBefore(holidayLabel, el.firstChild); // 날짜 왼쪽에 추가
+                            // el.insertBefore(holidayLabel, el.firstChild); // 날짜 왼쪽에 추가
                         }
 
                         // 리스트 뷰 처리
@@ -216,8 +222,10 @@
 
         // 사이드바 닫기 함수
         function closeSidebar() {
-            document.getElementById('eventSidebar').style.right = "-1000px";
+            document.getElementById('eventSidebar').classList.remove('active');
         }
+
+
     </script>
 
 </body>

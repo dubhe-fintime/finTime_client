@@ -2,6 +2,145 @@
  * 🔹 1. 기본 레이아웃 스타일
  *****************************************/
 
+ @import "./reset.css";
+ @import "./fonts.css";
+ @import "./variable.css";
+
+/* css 해보는중이옵니다. */
+
+body {
+    margin-top: 60px; /* 헤더의 높이에 맞게 조정 */
+}
+
+.header {
+    background: var(--blue900);
+    color: white;
+    padding: 10px 20px;
+    width: 100%;
+    position: fixed; /* 고정된 헤더 */
+    top: 0;
+    z-index: 1200; /* 다른 요소 위로 */
+    display: flex; /* Flexbox 사용 */
+    justify-content: space-between; /* 좌우 정렬 */
+    align-items: center; /* 수직 정렬 */
+}
+
+.header .btn {
+    z-index: 1201;
+}
+
+.fc-h-event .fc-event-title-container {
+    font-size: small;
+}
+
+.btn {
+    border: 1px solid transparent;
+    cursor: pointer
+}
+
+.btn.sm {
+    padding: 5px 12px;
+    border-radius: 8px;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    -ms-border-radius: 8px;
+    -o-border-radius: 8px
+}
+
+.btn.tertiary {
+    background-color: var(--white);
+    color: var(--blue900)
+}
+
+.btn.tertiary:active,
+.btn.tertiary:hover {
+    background-color: var(--blue100)
+}
+
+.btn.tertiary.off {
+    border-color: var(--grey400);
+    color: var(--grey400);
+}
+
+.btn.text {
+    color: var(--blue900);
+    font-weight: 500;
+}
+
+/* 🔸 바텀 시트 스타일 */
+#eventSidebar {
+    position: fixed;
+    bottom: -100%; /* 처음엔 화면 아래에 숨김 */
+    left: 0;
+    width: 100%;
+    height: 400px; /* 높이 조절 가능 */
+    background-color: white;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    transition: bottom 0.3s ease-in-out;
+    z-index: 10000;
+    overflow-y: auto;
+    border-radius: 15px 15px 0 0; /* 위쪽 둥글게 */
+
+    display: flex;
+    flex-direction: column;
+}
+
+
+.blur-effect {
+    opacity : 0.7;
+    border-radius: 50px !important;
+}
+
+
+
+
+/* 🔸 바텀 시트가 나타날 때 */
+#eventSidebar.active {
+    bottom: 0;
+}
+
+#eventSidebar .contents {
+    height: auto;
+    padding: 16px 24px 24px;
+    overflow-y: auto;
+    max-height: calc(100vh - 200px);
+    overflow-y: hidden;
+}
+
+
+#eventSidebar .top .close-btn {
+    width: 24px;
+    height: 24px;   
+    background-image: url(../assets/images/ic_24_close.svg);
+    background-repeat: no-repeat;
+    background-size: cover;
+    font-size: 0;
+    cursor: pointer
+}
+
+#eventSidebar .top {
+    display: flex;
+    justify-content: space-between
+}
+
+.contents-p {
+    margin-bottom: 8px;
+}
+
+
+.fc .fc-daygrid-more-link {
+    width: 100%;
+    background-color: var(--grey300);
+}
+
+.fc-scrollgrid-sync-table .fc-day-sun a {
+    color: var(--negativeRed);
+}
+
+/* css 해보는중이옵니다. */
+
+
 /* 캘린더 기본 설정 */
 #calendar {
     max-width: 100%;
@@ -27,16 +166,6 @@
  * 🔹 2. 타이틀 바 스타일
  *****************************************/
 
-#titlebar {
-    position: relative;
-    display: flex;
-    justify-content: center; /* h1을 중앙 정렬 */
-    align-items: center;
-    padding: 15px 20px; /* 높이 조절 */
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #ddd;
-    height: 30px;
-}
 
 /* 타이틀 스타일 */
 #titlebar h1 {
@@ -47,17 +176,6 @@
     transform: translateX(-50%);
 }
 
-/* 버튼 스타일 */
-#titlebar button {
-    position: absolute;
-    right: 20px;
-    padding: 8px 12px;
-    border: none;
-    background-color: #007bff;
-    color: white;
-    border-radius: 5px;
-    cursor: pointer;
-}
 
 #titlebar button:hover {
     background-color: #0056b3;
@@ -312,7 +430,7 @@
  * 🔹 6. 사이드바 & 팝오버 스타일
  *****************************************/
 
-/* 🔸 사이드바 스타일 */
+/* 🔸 사이드바 스타일
 #eventSidebar {
     position: fixed;
     top: 0;
@@ -324,8 +442,8 @@
     padding: 20px;
     transition: right 0.3s ease-in-out;
     z-index: 10000; /* 팝오버보다 높음 */
-    overflow-y: auto;
-}
+    /* overflow-y: auto;
+} */
 
 /* 🔸 팝오버 스타일 */
 .fc-popover {
