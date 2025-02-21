@@ -142,7 +142,11 @@ body {
     background-color: var(--grey400);
 }
 
-.fc-popover-body > 
+.fc-theme-standard td, .fc-theme-standard th {
+    border: none;
+    border-top: 2px solid var(--grey300);
+}
+
 
 /* css 해보는중이옵니다. */
 
