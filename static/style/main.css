@@ -73,7 +73,7 @@ body {
     bottom: -100%; /* 처음엔 화면 아래에 숨김 */
     left: 0;
     width: 100%;
-    height: 400px; /* 높이 조절 가능 */
+    height: 300px; /* 높이 조절 가능 */
     background-color: white;
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.2);
     padding: 20px;
