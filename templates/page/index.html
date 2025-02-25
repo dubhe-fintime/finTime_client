@@ -3,7 +3,11 @@
 
 <head>
     <meta charset="UTF-8" />
+    <!--  
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
     <title>Fin Time | 로그인</title>
     <link rel="icon" href="{{ url_for('static', filename='assets/images/favicon-32x32.png') }}" type="image/png">
     <link href="{{ url_for('static', filename='style/fonts.css') }}" rel="stylesheet" />
@@ -30,14 +34,34 @@
             font-family: "NotoSans";
         }
 
+        /**
         .wrapper {
             position: relative;
             width: 100%;
             height: 100%;
             background-color: #ebeff5;
         }
+        */
+
+        .wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
 
         .login-area {
+            position: relative; /* absolute 대신 relative */
+            max-width: 560px;
+            width: 100%;
+            background-color: #ffffff;
+            border-radius: 20px;
+            box-shadow: 0px 0px 28px 0px rgba(29, 35, 52, 0.1);
+            padding: 20px;
+        }
+
+         /**
+             .login-area {
             display: flex;
             align-items: center;
             justify-content: center;
@@ -55,6 +79,8 @@
             border-radius: 20px;
             transform-style: preserve-3d;
         }
+         */
+       
 
         .login-area::after,
         .login-area::before {
