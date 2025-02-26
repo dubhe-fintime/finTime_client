@@ -27,7 +27,10 @@
 <body>
     <div class="header" id="titlebar">
         <h2>Fin-Time</h2>
-        <button class="btn tertiary sm" id="mypageBtn"onclick="goTopage(this)">설정</button>
+        <div>
+            <button class="btn tertiary sm" id="scrollToTopBtn"onclick="scrollToTop()">맨위로</button>
+            <button class="btn tertiary sm" id="mypageBtn"onclick="goTopage(this)">설정</button>
+        </div>
     </div>
 
     <div id="calendar"></div>
@@ -350,6 +353,12 @@
         $(".article_content").append(value)
     }
 
+    function scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth' // 부드러운 스크롤
+        });
+    }
 
     //바텀시트 tab
     $(".tabs .menu").click(function (e) {
