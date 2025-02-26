@@ -203,14 +203,15 @@ body {
     padding: 0 4px;
 }
 
-/* 🔸 공휴일 스타일 */
+/* 🔸 공휴일 스타일 (날짜 & 리스트) */
 .fc-daygrid-day-top.has-holiday .fc-daygrid-day-number,
 .fc-list-day.has-holiday .fc-list-day-text {
     color: red !important;
 }
 
+/* 🔸 공휴일 라벨 스타일 */
 .holiday-label {
-    font-size: 12px;
+    font-size: 12px; /* 기본 크기 */
     color: red;
     white-space: nowrap;
     text-align: left;
@@ -222,6 +223,30 @@ body {
 .fc-daygrid-day-number {
     flex-shrink: 0;
     text-align: right;
+    font-size: 14px; /* 기본 폰트 크기 */
+    font-weight: bold;
+}
+
+/* 📌 반응형: 화면 너비 768px 이하 (태블릿 & 모바일) */
+@media (max-width: 768px) {
+    .fc-daygrid-day-number {
+        font-size: 12px; /* 날짜 크기 줄이기 */
+    }
+
+    .holiday-label {
+        font-size: 10px; /* 공휴일 라벨 크기 줄이기 */
+    }
+}
+
+/* 📌 반응형: 화면 너비 480px 이하 (작은 모바일 기기) */
+@media (max-width: 480px) {
+    .fc-daygrid-day-number {
+        font-size: 10px; /* 날짜 크기 더 줄이기 */
+    }
+
+    .holiday-label {
+        font-size: 8px; /* 공휴일 라벨 크기 더 줄이기 */
+    }
 }
 
 /* 🔸 요일별 스타일 */
