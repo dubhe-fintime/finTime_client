@@ -496,19 +496,23 @@ body {
  *****************************************/
 
 /* 기본 이벤트 텍스트 스타일 */
-.fc-event-main {
-    font-size: 12px; /* 기본 폰트 크기 */
+.fc-event-main,
+.fc-event-title {
+    left: 15px;
+    font-size: 14px !important; /* 기본 폰트 크기 */
 }
 
 /* 모바일 화면에서 이벤트 텍스트 크기 줄이기 */
 @media (max-width: 768px) {
-    .fc-event-main {
-        font-size: 10px !important; /* 모바일에서 폰트 크기 작게 */
+    .fc-event-main,
+    .fc-event-title {
+        font-size: 12px !important; /* 모바일에서 폰트 크기 작게 */
     }
 }
 
 @media (max-width: 480px) {
-    .fc-event-main {
-        font-size: 8px !important; /* 더 작은 화면에서는 더 줄이기 */
+    .fc-event-main,
+    .fc-event-title {
+        font-size: 10px !important; /* 더 작은 화면에서는 더 줄이기 */
     }
 }
