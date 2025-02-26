@@ -91,7 +91,10 @@ body {
     flex-direction: column;
 }
 
+.fc-daygrid-block-event .fc-event-title {
+    padding: 0 !important; 
 
+}
 .blur-effect {
     opacity : 0.6;
     border-radius: 50px !important;
@@ -314,13 +317,13 @@ body {
 /* 🔸 공휴일 스타일 (날짜 & 리스트) */
 .fc-daygrid-day-top.has-holiday .fc-daygrid-day-number,
 .fc-list-day.has-holiday .fc-list-day-text {
-    color: red !important;
+    color: var(--negativeRed) !important;
 }
 
 /* 🔸 공휴일 라벨 스타일 */
 .holiday-label {
     font-size: 12px; /* 기본 크기 */
-    color: red;
+    color: var(--negativeRed);
     white-space: nowrap;
     text-align: left;
     margin-right: auto;
