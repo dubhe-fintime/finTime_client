@@ -133,12 +133,13 @@ body {
     margin-bottom: 8px;
 }
 
-
+/**더보기 버튼 색상**/
 .fc .fc-daygrid-more-link {
     width: 100%;
     background-color: var(--grey300);
 }
 
+/**일요일 색깔**/
 .fc-scrollgrid-sync-table .fc-day-sun a {
     color: var(--negativeRed);
 }
@@ -152,6 +153,13 @@ body {
     border-top: 2px solid var(--grey300);
 }
 
+/**달력 일자별 간격**/
+.fc .fc-daygrid-body-natural .fc-daygrid-day-events {
+    margin-bottom: 3px;
+}
+
+
+/* 바텀 시트 > TAB START */
 .tabs {
     display: flex;
     width: 90%;
@@ -195,7 +203,9 @@ body {
     color: var(--blue900)
 }
 
+/* 바텀 시트 > TAB END */
 
+/* 바텀 시트 > 금융사 기사 START */
 .article-item {
     display: flex;
     width: 100%;
@@ -239,6 +249,8 @@ body {
     text-align: center; /* 텍스트 가운데 정렬 */
 }
 
+/* 바텀 시트 > 금융사 기사 END */
+
 
 /* css 해보는중이옵니다. */
 
@@ -279,9 +291,6 @@ body {
 }
 
 
-#titlebar button:hover {
-    background-color: #0056b3;
-}
 
 /*****************************************
  * 🔹 3. FullCalendar 스타일
