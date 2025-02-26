@@ -34,16 +34,23 @@
     <!-- 사이드바 추가 -->
     <div class="eventBottom" id="eventSidebar">
         <div class="top">
-            <h4>이벤트 상세</h4>
+            <ul class="tabs">
+                <li class="menu active" id="tab1" data-tab-number="tab1">이벤트 상세</li>
+                <li class="menu" id="tab2" data-tab-number="tab2">금융사 최신 기사</li>
+            </ul>
             <button class="close-btn" onclick="closeSidebar()">닫기</button>
         </div>
 
         <div class="contents">
+            <input type="text" id="cor_no" style="display: none;">
             <p class="contents-p"><strong>Title:</strong> <span id="sidebarEventTitle"></span></p>
             <p class="contents-p"><strong>Start:</strong> <span id="sidebarEventStart"></span></p>
             <p class="contents-p"><strong>End:</strong> <span id="sidebarEventEnd"></span></p>
             <p class="contents-p"><strong>Detail Link:</strong> <span id="sidebarEventDescription"></span></p>
         </div>
+        
+
+        <div class="article_content" style="display: none;"></div>
     </div>
     <script>
         let holidayModified = false; // 제목이 수정되었는지 확인하는 플래그
@@ -51,6 +58,7 @@
         var calendarEl
         var calendar
         var popoverElement //팝오버랑 바텀시트가 동시에 닫히는 문제 발생 -> flag 
+        var newsList
 
         $(document).ready(function () {
             requestHoliday();
@@ -71,11 +79,25 @@
                             name: holiday.hoi_name   // 공휴일 이름
                         };
                     });
+                    requestNews()
                     
                     initCalendar();
                 },
                 error: function () {
                     alert("공휴일을 불러오는 데 실패했습니다.");
+                }
+            });
+        }
+
+        function requestNews() {
+            $.ajax({
+                url: "{{api_domain}}/getNews",
+                type: "POST",
+                success: function (response) {
+                    newsList = response
+                },
+                error: function () {
+                    alert("뉴스 기사 가져오기 실패");
                 }
             });
         }
@@ -117,7 +139,8 @@
                                     backgroundColor: event.cor_color,
                                     borderColor: event.cor_color,
                                     textColor: "white",
-                                    className: 'blur-effect'
+                                    className: 'blur-effect',
+                                    cor_no : event.cor_no
                                 };
                             });
                         },
@@ -133,6 +156,9 @@
                     // 클릭한 이벤트 정보
                     const event = info.event;
                     popoverElement = $(info.jsEvent.currentTarget);
+                    
+                    //02/26 추가 ㅊㅇㅎ
+                    $("#cor_no").val(event.extendedProps.cor_no)
 
                     // 사이드바 내용 업데이트
                     document.getElementById('sidebarEventTitle').textContent = event.title;
@@ -238,15 +264,61 @@
         // 사이드바 닫기 함수
         function closeSidebar() {
             document.getElementById('eventSidebar').classList.remove('active');
+            document.getElementById('tab1').classList.add('active');
+            document.getElementById('tab2').classList.remove('active');
+            $(".contents").show()
+            $(".article_content").hide()
         }
 
-        //more -> 바텀시트 활성화 -> 다른곳 누르면 제거
+        //이벤트 클릭 (fullcalendar 이벤트가 body 전체로 잡혀서 구분하기 위해 만듬)
         $('body').on('click', function (e) {
-            // close the popover if: click outside of the popover || click on the close button of the popover
-            if (popoverElement && ((!popoverElement.is(e.target) && popoverElement.has(e.target).length === 0 && $('.fc-popover').has(e.target).length === 0) || (popoverElement.has(e.target) && e.target.id === 'closepopover'))) {
+            if(e.target.id == "tab1"){
+                $(".contents").show()
+                $(".article_content").hide()
+            } else if (e.target.id == "tab2"){
+                binding_article()
+                $(".contents").hide()
+                $(".article_content").show()
+                
+            } else if (popoverElement && ((!popoverElement.is(e.target) && popoverElement.has(e.target).length === 0 && $('.fc-popover').has(e.target).length === 0) || (popoverElement.has(e.target) && e.target.id === 'closepopover'))) {
             closeSidebar();
-        }
+        }   
     });
+
+    //바텀시트 > 금융사 최신기사 바인딩
+    function binding_article () {
+        $(".article_content").empty()
+        var temp_li = newsList.filter(data=>data.cor_gp == $("#cor_no").val())
+        value = ""
+        if(temp_li.length == 0){
+            value += `<div class="empty-message">연관된 기사가 없습니다.</div>`
+        } else {
+            temp_li.forEach((v,i)=>{
+            value += `            
+            <a href="${v.link}">
+                <li class="article-item">
+                    <img src="${v.press_img}" alt="">
+                    <div class="article-content">
+                        <div class="article-title">${v.title}</div>
+                        <div class="article-description">${v.content}</div>
+                    </div>
+                </li>
+            </a>`
+        })
+        }
+        $(".article_content").append(value)
+    }
+
+
+    //바텀시트 tab
+    $(".tabs .menu").click(function (e) {
+        $(".tabs .menu").removeClass("active");
+        $(".tab-contents").removeClass("active");
+        $(this).addClass("active");
+        $(`#${$(e.target).data("tabNumber")}`).addClass("active");
+    });
+
+
 
     </script>
 
