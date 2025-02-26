@@ -210,30 +210,8 @@
 
                     // 사이드바 열기
                     document.getElementById('eventSidebar').classList.add('active');
-                    
-                     // 팝오버 외부 클릭 시 사이드바 닫기 이벤트 추가
-                    const popover = info.el.querySelector('.fc-popover');
-                    if (popover) {
-                        console.log("여기!")
-                        document.addEventListener('click', function(event) {
-                            if (!popover.contains(event.target)) {
-                                popover.style.display = 'none'; // 팝오버 닫기
-                                closeSidebar(); // 사이드바 닫기 함수 호출
-                            }
-                        }, { once: true }); // 한 번만 실행되도록 설정
-                    }
                 },
                 eventDidMount: function(info) {
-                    // 팝오버 외부 클릭 시 팝오버 닫기 이벤트 추가
-                    const popover = info.el.querySelector('.fc-popover');
-                    if (popover) {
-                        document.addEventListener('click', function(event) {
-                            if (!popover.contains(event.target)) {
-                                popover.style.display = 'none'; // 팝오버 닫기
-                            }
-                        });
-                    }
-
                     // 시간 요소를 숨기기
                     const eventTimeElement = info.el.querySelector('.fc-event-time');
                     
