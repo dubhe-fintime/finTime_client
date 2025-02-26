@@ -203,6 +203,10 @@
                             .replace(/0(\d)일/, '$1일');
         }
 
+        function insertAfter(newNode, referenceNode) {
+            referenceNode.parentNode.insertBefore(newNode, referenceNode.nextSibling);
+        }
+
         // 공휴일 표시 함수
         function markHolidays() {
             document.querySelectorAll('.holiday-label').forEach(el => el.remove());
@@ -220,7 +224,12 @@
 
                         // 달력 뷰 처리
                         if (el.classList.contains('fc-daygrid-day-top')) {
-                            // el.insertBefore(holidayLabel, el.firstChild); // 날짜 왼쪽에 추가
+                            insertAfter(holidayLabel, el.firstChild); // 날짜 왼쪽에 추가
+                        }
+
+                        // 달력 뷰 처리
+                        if (el.classList.contains('fc-daygrid-day-top')) {
+                            insertAfter(holidayLabel, el.firstChild); // 날짜 오른쪽에 추가
                         }
 
                         // 리스트 뷰 처리
