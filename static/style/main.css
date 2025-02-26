@@ -491,7 +491,7 @@ body {
 
 /* 🔸 '오늘' 버튼 */
 .fc .fc-today-button {
-    background-color: #28a745 !important;
+    background-color: var(--grey550) !important;
     color: white !important;
 }
 
@@ -516,7 +516,7 @@ body {
 .fc .fc-dayGridMonth-button,
 .fc .fc-listMonth-button,
 .fc .fc-dayGridWeek-button {
-    background-color: #17a2b8 !important;
+    background-color: var(--blue600) !important;
     color: white !important;
     font-size: 12px;
     font-weight: bold;
@@ -527,7 +527,7 @@ body {
 
 /* 🔸 버튼 활성화 시 강조 */
 .fc .fc-button-active {
-    background-color: #117a8b !important;
+    background-color: var(--blue900) !important;
     font-weight: bold;
     border: 2px solid white;
 }
