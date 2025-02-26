@@ -52,6 +52,16 @@ body {
     -o-border-radius: 8px
 }
 
+.btn.primary {
+    background-color: var(--blue900);
+    color: var(--white)
+}
+
+.btn.primary:active,
+.btn.primary:hover {
+    background-color: #243698
+}
+
 .btn.tertiary {
     background-color: var(--white);
     color: var(--blue900)
