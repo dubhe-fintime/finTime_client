@@ -252,6 +252,15 @@ body {
 /* 바텀 시트 > 금융사 기사 END */
 
 
+.fc-icon-chevron-right{
+    content: url(../assets/images/right_arrow_icon.png);
+}
+.fc-icon-chevron-left{
+    content: url(../assets/images/left_arrow_icon.png);
+}
+
+.fc-button
+
 /* css 해보는중이옵니다. */
 
 
@@ -489,7 +498,7 @@ body {
 /* 🔸 이전/다음 버튼 스타일 */
 .fc .fc-prev-button,
 .fc .fc-next-button {
-    background-color: #6c757d !important;
+    background-color: #eee!important;
     color: white !important;
     border-radius: 50%;
     width: 30px !important;
