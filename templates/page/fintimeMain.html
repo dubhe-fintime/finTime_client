@@ -27,7 +27,10 @@
 <body>
     <div class="header" id="titlebar">
         <h2>Fin-Time</h2>
-        <button class="btn tertiary sm" id="mypageBtn"onclick="goTopage(this)">설정</button>
+        <div>
+            <button class="btn tertiary sm" id="scrollToTopBtn"onclick="scrollToTop()">맨위로</button>
+            <button class="btn tertiary sm" id="mypageBtn"onclick="goTopage(this)">설정</button>
+        </div>
     </div>
 
     <div id="calendar"></div>
@@ -151,6 +154,43 @@
                 ],
                 datesSet: function(info) {
                     markHolidays();
+                  
+                    const today = new Date();
+                    const todayISO = today.toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 변환
+
+                    // FullCalendar 리스트 뷰에서 오늘 날짜 요소 찾기
+                    const listDays = document.querySelectorAll('.fc-list-day');
+
+                    let todayElement = null;
+                    listDays.forEach(day => {
+                        const dateEl = day.querySelector('.fc-list-day-text');
+                        if (dateEl && dateEl.textContent.includes(`${today.getDate()}일`)) {
+                            todayElement = day;
+                        }
+                    });
+
+                    if (todayElement) {
+                        todayElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+
+                        const header = document.getElementById('titlebar');
+                        const headerHeight = header ? header.offsetHeight : 0;
+
+                        // 스크롤 애니메이션이 끝날 때까지 기다린 후, 추가 조정
+                        function adjustScroll() {
+                            const scrolledEnough = Math.abs(todayElement.getBoundingClientRect().top) < 5;
+
+                            if (!scrolledEnough) {
+                                requestAnimationFrame(adjustScroll);
+                            } else {
+                                window.scrollBy(0, -headerHeight); // 헤더 높이만큼 추가 이동
+                            }
+                        }
+
+                        requestAnimationFrame(adjustScroll);
+                    }
                 },
                 eventClick: function(info) {
                     // 클릭한 이벤트 정보
@@ -170,30 +210,8 @@
 
                     // 사이드바 열기
                     document.getElementById('eventSidebar').classList.add('active');
-                    
-                     // 팝오버 외부 클릭 시 사이드바 닫기 이벤트 추가
-                    const popover = info.el.querySelector('.fc-popover');
-                    if (popover) {
-                        console.log("여기!")
-                        document.addEventListener('click', function(event) {
-                            if (!popover.contains(event.target)) {
-                                popover.style.display = 'none'; // 팝오버 닫기
-                                closeSidebar(); // 사이드바 닫기 함수 호출
-                            }
-                        }, { once: true }); // 한 번만 실행되도록 설정
-                    }
                 },
                 eventDidMount: function(info) {
-                    // 팝오버 외부 클릭 시 팝오버 닫기 이벤트 추가
-                    const popover = info.el.querySelector('.fc-popover');
-                    if (popover) {
-                        document.addEventListener('click', function(event) {
-                            if (!popover.contains(event.target)) {
-                                popover.style.display = 'none'; // 팝오버 닫기
-                            }
-                        });
-                    }
-
                     // 시간 요소를 숨기기
                     const eventTimeElement = info.el.querySelector('.fc-event-time');
                     
@@ -313,6 +331,12 @@
         $(".article_content").append(value)
     }
 
+    function scrollToTop() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth' // 부드러운 스크롤
+        });
+    }
 
     //바텀시트 tab
     $(".tabs .menu").click(function (e) {
