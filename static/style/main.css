@@ -278,11 +278,6 @@ body {
     transform: translateX(-50%);
 }
 
-
-#titlebar button:hover {
-    background-color: #0056b3;
-}
-
 /*****************************************
  * 🔹 3. FullCalendar 스타일
  *****************************************/
