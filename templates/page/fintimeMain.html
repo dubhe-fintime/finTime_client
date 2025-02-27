@@ -324,7 +324,7 @@
             document.getElementById('tab3').classList.remove('active');
             $(".contents").show()
             $(".article_content").hide()
-            $(".video_content").hide()
+            $(".video_content").empty()
         }
 
         //이벤트 클릭 (fullcalendar 이벤트가 body 전체로 잡혀서 구분하기 위해 만듬)
@@ -386,7 +386,7 @@
                 <div class="video-item">
                     <strong  class="video-title" >${v.content_title}</strong> 
                     <iframe 
-                    src="${v.content_url}" 
+                    src="${v.content_url}?showinfo='0'" 
                     frameborder="0" 
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
                     allowfullscreen>
