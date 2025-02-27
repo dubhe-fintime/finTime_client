@@ -39,7 +39,8 @@
         <div class="top">
             <ul class="tabs">
                 <li class="menu active" id="tab1" data-tab-number="tab1">이벤트 상세</li>
-                <li class="menu" id="tab2" data-tab-number="tab2">금융사 최신 기사</li>
+                <li class="menu" id="tab2" data-tab-number="tab2">금융사 기사</li>
+                <li class="menu" id="tab3" data-tab-number="tab3">유튜브</li>
             </ul>
             <button class="close-btn" onclick="closeSidebar()">닫기</button>
         </div>
@@ -54,6 +55,7 @@
         
 
         <div class="article_content" style="display: none;"></div>
+        <div class="video_content" style="display: none;"></div>
     </div>
     <script>
         let holidayModified = false; // 제목이 수정되었는지 확인하는 플래그
@@ -62,6 +64,7 @@
         var calendar
         var popoverElement //팝오버랑 바텀시트가 동시에 닫히는 문제 발생 -> flag 
         var newsList
+        var videoList
         
 
         $(document).ready(function () {
@@ -85,6 +88,7 @@
                         };
                     });
                     requestNews()
+                    requestVideos()
                     
                     initCalendar();
                 },
@@ -100,6 +104,19 @@
                 type: "POST",
                 success: function (response) {
                     newsList = response
+                },
+                error: function () {
+                    alert("뉴스 기사 가져오기 실패");
+                }
+            });
+        }
+
+        function requestVideos() {
+            $.ajax({
+                url: "{{api_domain}}/getYoutube",
+                type: "POST",
+                success: function (response) {
+                    videoList = response
                 },
                 error: function () {
                     alert("뉴스 기사 가져오기 실패");
@@ -156,7 +173,7 @@
                 ],
                 datesSet: function(info) {
                     markHolidays();
-                  
+
                     if (info.view.type == "listMonth") {
                         const today = new Date();
                         const todayISO = today.toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 변환
@@ -304,8 +321,10 @@
             document.getElementById('eventSidebar').classList.remove('active');
             document.getElementById('tab1').classList.add('active');
             document.getElementById('tab2').classList.remove('active');
+            document.getElementById('tab3').classList.remove('active');
             $(".contents").show()
             $(".article_content").hide()
+            $(".video_content").hide()
         }
 
         //이벤트 클릭 (fullcalendar 이벤트가 body 전체로 잡혀서 구분하기 위해 만듬)
@@ -313,10 +332,17 @@
             if(e.target.id == "tab1"){
                 $(".contents").show()
                 $(".article_content").hide()
+                $(".video_content").hide()
             } else if (e.target.id == "tab2"){
                 binding_article()
                 $(".contents").hide()
+                $(".video_content").hide()
                 $(".article_content").show()
+            } else if (e.target.id == "tab3"){
+                binding_video()
+                $(".contents").hide()
+                $(".article_content").hide()
+                $(".video_content").show()
                 
             } else if (popoverElement && ((!popoverElement.is(e.target) && popoverElement.has(e.target).length === 0 && $('.fc-popover').has(e.target).length === 0) || (popoverElement.has(e.target) && e.target.id === 'closepopover'))) {
             closeSidebar();
@@ -328,12 +354,12 @@
         $(".article_content").empty()
         var temp_li = newsList.filter(data=>data.cor_gp == $("#cor_no").val())
         value = ""
-        if(temp_li.length == 0){
+        if(newsList.length == 0 || temp_li.length == 0){
             value += `<div class="empty-message">연관된 기사가 없습니다.</div>`
         } else {
             temp_li.forEach((v,i)=>{
             value += `            
-            <a href="${v.link}">
+            <a href="${v.link}" target="_blank">
                 <li class="article-item">
                     <img src="${v.press_img}" alt="">
                     <div class="article-content">
@@ -345,6 +371,30 @@
         })
         }
         $(".article_content").append(value)
+    }
+
+    //바텀시트 > 유튜브 영상 바인딩
+    function binding_video() {
+        $(".video_content").empty()
+        var temp_li = videoList.filter(data=>data.cor_gp == $("#cor_no").val())
+        value = ""
+        if(videoList.length == 0 || temp_li.length == 0){
+            value += `<div class="empty-message">연관된 영상이 없습니다.</div>`
+        } else {
+            temp_li.forEach((v,i)=>{
+            value += `            
+                <div class="video-item">
+                    <strong  class="video-title" >${v.content_title}</strong> 
+                    <iframe 
+                    src="${v.content_url}" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                    allowfullscreen>
+                    </iframe>
+                </div>`
+        })
+        }
+        $(".video_content").append(value)
     }
 
     function scrollToTop() {
