@@ -62,10 +62,12 @@
         var calendar
         var popoverElement //팝오버랑 바텀시트가 동시에 닫히는 문제 발생 -> flag 
         var newsList
+        
 
         $(document).ready(function () {
             requestHoliday();
         })
+
 
         function requestHoliday() {
             $.ajax({
@@ -82,7 +84,6 @@
                             name: holiday.hoi_name   // 공휴일 이름
                         };
                     });
-                    requestNews()
                     
                     initCalendar();
                 },
@@ -238,6 +239,17 @@
                 }
             });
             calendar.render();
+
+            //스크롤 오늘날짜 이동
+            setTimeout(function() {
+                var target = $("#fc-dom-66");
+                if (target.length) {
+                    target.focus();  // 포커스 이동
+                    target[0].scrollIntoView({ behavior: "smooth", block: "center" });  // 부드럽게 이동
+                }
+            }, 500);
+
+
         }
 
         // 날짜 포맷 변환 함수 (YYYYMMDD → YYYY년 M월 D일)
