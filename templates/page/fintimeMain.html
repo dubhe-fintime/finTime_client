@@ -176,7 +176,7 @@
 
                     if (info.view.type == "listMonth") {
                         const today = new Date();
-                        const todayISO = today.toISOString().split('T')[0]; // YYYY-MM-DD 형식으로 변환
+                        const todayISO = today.toISOString().split('T')[0]; // YYYY-MM-DD 형식
 
                         // FullCalendar 리스트 뷰에서 오늘 날짜 요소 찾기
                         const listDays = document.querySelectorAll('.fc-list-day');
@@ -184,8 +184,25 @@
                         let todayElement = null;
                         listDays.forEach(day => {
                             const dateEl = day.querySelector('.fc-list-day-text');
-                            if (dateEl && dateEl.textContent.includes(`${today.getDate()}일`)) {
-                                todayElement = day;
+
+                            if (dateEl) {
+                                const dateText = dateEl.textContent.trim();
+                                const match = dateText.match(/(\d{4})년\s*(\d{1,2})월\s*(\d{1,2})일/);
+
+                                if (match) {
+                                    const year = match[1];
+                                    const month = match[2].padStart(2, '0'); // 두 자리 변환
+                                    const dayNum = match[3].padStart(2, '0');
+                                    const formattedDate = `${year}-${month}-${dayNum}`; // YYYY-MM-DD 형식
+
+                                    // 비교 전에 일치하는지 로그 추가
+                                    if (formattedDate === todayISO) {                                        
+                                        // 여러 개 요소가 있을 경우, 가장 처음 찾은 요소만 저장
+                                        if (!todayElement) {
+                                            todayElement = day;
+                                        }
+                                    }
+                                }
                             }
                         });
 
@@ -198,14 +215,13 @@
                             const header = document.getElementById('titlebar');
                             const headerHeight = header ? header.offsetHeight : 0;
 
-                            // 스크롤 애니메이션이 끝날 때까지 기다린 후, 추가 조정
                             function adjustScroll() {
                                 const scrolledEnough = Math.abs(todayElement.getBoundingClientRect().top) < 5;
 
                                 if (!scrolledEnough) {
                                     requestAnimationFrame(adjustScroll);
                                 } else {
-                                    window.scrollBy(0, -headerHeight); // 헤더 높이만큼 추가 이동
+                                    window.scrollBy(0, -headerHeight);
                                 }
                             }
 
