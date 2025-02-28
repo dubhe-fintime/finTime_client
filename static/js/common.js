@@ -5,7 +5,10 @@ function generateSHA256(input) {
 
 //페이지 이동
 function goTopage(target){
+  $(".content").removeClass("shift")
+  $(".lnb").removeClass("active")
   window.location.href = "/" + $(target).attr("id").replace("Btn","")
+
 }
 
 //ESC시 Modal창 닫기

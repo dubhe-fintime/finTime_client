@@ -12,17 +12,16 @@
     <script src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        html, body {
+            height: 100%; /* 전체 화면 높이를 유지 */
+            overflow: hidden; /* 전체 페이지에서 스크롤 방지 */
         }
 
-        body {
+        .wrapper {
             display: flex;
-            min-height: 100vh;
-            overflow-y: scroll; /* body 부분만 스크롤 가능 */
-            height: 100vh; /* body 높이 지정 */
+            flex-direction: column;
+            height: 100vh; /* 전체 화면 높이 */
+            width: 100%;
         }
 
         .header {
@@ -30,12 +29,13 @@
             color: white;
             padding: 10px 20px;
             width: 100%;
-            position: fixed; /* 고정된 헤더 */
+            height: 60px;
+            position: fixed;
             top: 0;
-            z-index: 1200; /* 다른 요소 위로 */
-            display: flex; /* Flexbox 사용 */
-            justify-content: space-between; /* 좌우 정렬 */
-            align-items: center; /* 수직 정렬 */
+            z-index: 1200;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .footer {
@@ -43,13 +43,23 @@
             color: white;
             padding: 10px 20px;
             width: 100%;
-            position: fixed; /* 고정된 푸터 */
-            bottom: 0; /* 아래쪽 고정 */
-            z-index: 1200; /* 다른 요소 위로 */
-            display: flex; /* Flexbox 사용 */
-            justify-content: center; /* 중앙 정렬 */
-            align-items: center; /* 수직 정렬 */
+            height: 50px;
+            position: fixed;
+            bottom: 0;
+            z-index: 1200;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
+
+        .content {
+            flex: 1; /* 남은 공간 자동 채우기 */
+            padding: 20px;
+            margin-top: 60px; /* 헤더 높이 */
+            margin-bottom: 50px; /* 푸터 높이 */
+            overflow-y: auto; /* 본문 내용만 스크롤 가능 */
+        }
+
 
 
 
@@ -78,14 +88,6 @@
             cursor: pointer;
             z-index: 1100;
             border-radius: 5px;
-        }
-
-        .content {
-            flex: 1;
-            padding: 20px;
-            margin-left: 0;
-            margin-top: 60px; /* 헤더 높이만큼 여백 추가 */
-            transition: margin-left 0.3s ease;
         }
 
         .content.shift {
