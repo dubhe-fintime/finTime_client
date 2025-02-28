@@ -292,29 +292,6 @@
                 toggleButton.style.left = "15px";
             }
         });
-
-        document.querySelectorAll(".lnb a").forEach(link => {
-            link.addEventListener("click", (event) => {
-                event.preventDefault();
-                const page = event.target.dataset.page;
-                loadContent(page);
-            });
-        });
-
-        function loadContent(page) {
-            const mainContent = document.getElementById("main-content");
-            let contentHTML = "";
-
-            if (page === "home") {
-                contentHTML = `<h1>홈</h1><p>여기가 기본 페이지입니다.</p>`;
-            } else if (page === "menu1") {
-                contentHTML = `<h1>메뉴 1</h1><p>메뉴 1의 내용입니다.</p>`;
-            } else if (page === "menu2") {
-                contentHTML = `<h1>메뉴 2</h1><p>메뉴 2의 내용입니다.</p>`;
-            }
-
-            mainContent.innerHTML = contentHTML;
-        }
         
     </script>
 
