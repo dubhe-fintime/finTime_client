@@ -121,6 +121,14 @@
         }
 
     
+        .address-btn {
+            display: flex;
+            flex-direction: column; /* 세로 정렬 */
+            align-items: center;
+            justify-content: center;
+            width: 80px;
+            height: 50px;
+        }
     </style>
 </head>
 <body>
@@ -170,7 +178,11 @@
             <div class="input-wrap sm">
                 <input id="user_address_1" class="input" placeholder="기관번호를 입력 해 주세요" disabled>
                 <span class="delete-btn" onclick="DeleteInput('user_address')"></span>
-                <button onclick="daumAPI()">우편번호 찾기</button>
+                
+                <button class="address-btn" onclick="daumAPI()">
+                    <span>우편번호</span><span>찾기</span>
+                  </button>
+
             </div>
             <div class="input-wrap sm">
                 <input id="user_address_2" class="input" placeholder="기관번호를 입력 해 주세요" onfocus="FocusInput('user_address_2')" oninput="ChangeInput('user_address_2')" onblur="BlurInput('user_address_2')" value="" required="">
