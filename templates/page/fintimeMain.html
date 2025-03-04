@@ -174,6 +174,23 @@
                 datesSet: function(info) {
                     markHolidays();
 
+                    if(info.view.type == "dayGridMonth") {
+                        setTimeout(function() {
+                            const today = new Date();
+                            const todayISO = today.toISOString().split('T')[0]; // YYYY-MM-DD 형식
+
+                            // data-date 속성이 오늘 날짜와 같은 td 요소 찾기
+                            const todayCell = document.querySelector(`td[data-date='${todayISO}']`);
+
+                            if (todayCell) {
+                                const ariaLabelledby = todayCell.getAttribute("aria-labelledby");
+                                var target = $(`#${ariaLabelledby}`); // jQuery 방식으로 요소 선택
+                                target.focus();  // 포커스 이동
+                                target[0].scrollIntoView({ behavior: "smooth", block: "center" });  // 부드럽게 이동
+                            }
+                        }, 500);
+                    }
+
                     if (info.view.type == "listMonth") {
                         const today = new Date();
                         const todayISO = today.toISOString().split('T')[0]; // YYYY-MM-DD 형식
@@ -276,22 +293,6 @@
                 }
             });
             calendar.render();
-
-            //스크롤 오늘날짜 이동
-            setTimeout(function() {
-                const today = new Date();
-                const todayISO = today.toISOString().split('T')[0]; // YYYY-MM-DD 형식
-
-                // data-date 속성이 오늘 날짜와 같은 td 요소 찾기
-                const todayCell = document.querySelector(`td[data-date='${todayISO}']`);
-
-                if (todayCell) {
-                    const ariaLabelledby = todayCell.getAttribute("aria-labelledby");
-                    var target = $(`#${ariaLabelledby}`); // jQuery 방식으로 요소 선택
-                    target.focus();  // 포커스 이동
-                    target[0].scrollIntoView({ behavior: "smooth", block: "center" });  // 부드럽게 이동
-                }
-            }, 500);
         }
 
         // 날짜 포맷 변환 함수 (YYYYMMDD → YYYY년 M월 D일)
