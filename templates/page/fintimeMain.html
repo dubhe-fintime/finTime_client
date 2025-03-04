@@ -279,14 +279,20 @@
 
             //스크롤 오늘날짜 이동
             setTimeout(function() {
-                var target = $("#fc-dom-66");
-                if (target.length) {
+                var target;
+
+                const today = new Date();
+                const todayISO = today.toISOString().split('T')[0]; // YYYY-MM-DD 형식
+
+                // data-date 속성이 오늘 날짜와 같은 td 요소 찾기
+                const todayCell = document.querySelector(`td[data-date='${todayISO}']`);
+
+                if (todayCell) {
+                    target = todayCell.getAttribute("aria-labelledby");
                     target.focus();  // 포커스 이동
                     target[0].scrollIntoView({ behavior: "smooth", block: "center" });  // 부드럽게 이동
                 }
             }, 500);
-
-
         }
 
         // 날짜 포맷 변환 함수 (YYYYMMDD → YYYY년 M월 D일)
