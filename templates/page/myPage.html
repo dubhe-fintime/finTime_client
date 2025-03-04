@@ -67,8 +67,9 @@
 
         .lnb {
             width: 120px;
-            background: #333;
-            color: white;
+            background-color: var(--grey200);
+            color:var(--blue900);
+            border-right:1px solid var(--blue200);
             padding: 20px;
             position: fixed;
             height: calc(100vh - 40px); /* 수정된 부분: 헤더 높이를 제외한 높이 */
@@ -133,10 +134,18 @@
             height: 50px;
         }
         * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .lnb a {
+            text-decoration: none; /* 밑줄 제거 (선택 사항) */
+            margin-bottom: 10px;
+        }
+        .lnb-content {
+            margin-top: 15px;
+        }
 
     </style>
 </head>
@@ -152,15 +161,15 @@
 
 
     <nav class="lnb">
-        <h1>LNB</h1>
-        <ul>
+
+        <div class="lnb-content">
             <ul class="depth2">
                 <li><a id="setShowBtn" class="depth3" href="#" onclick="goTopage(this)" data-page="menu1">캘린더 설정</a></li>
             </ul>
             <ul class="depth2">
                 <li><a class="depth3" href="#" onclick="" data-page="menu2">메뉴2</a></li>
             </ul>
-        </ul>
+        </div>
     </nav>
 
     <main class="content" id="main-content">
