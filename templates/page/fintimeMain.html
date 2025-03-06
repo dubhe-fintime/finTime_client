@@ -151,7 +151,7 @@
                                 const startDate = new Date(event.evt_st_dt);  // 시작 날짜
                                 startDate.setHours(0, 0, 0, 0); // 시분초 초기화
 
-                                const endDate = new Date(event.evt_ed_dt);    // 종료 날짜
+                                const endDate = event.evt_ed_dt ? new Date(event.evt_ed_dt) : startDate;
                                 endDate.setHours(0, 0, 0, 0); // 시분초 초기화
 
                                 return {
