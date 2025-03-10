@@ -141,37 +141,50 @@
                     month: '2-digit'
                 },
                 eventOrder: "cor_no,start", // 특정 필드 기준으로 정렬
-                eventSources: [
-                    {
-                        url: "{{api_domain}}/getEventMst",  // API 엔드포인트
-                        method: "POST",
-                        success: function (response) {
-                            // 서버에서 받은 데이터(response)를 FullCalendar 형식으로 변환
-                            return response.map(event => {
-                                const startDate = new Date(event.evt_st_dt);  // 시작 날짜
-                                startDate.setHours(0, 0, 0, 0); // 시분초 초기화
+                events: async function(fetchInfo, successCallback, failureCallback) {
+                    try {
+                        const response = await fetch("{{api_domain}}/getEventMst", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                id: localStorage.getItem("id")
+                            })
+                        });
 
-                                const endDate = event.evt_ed_dt ? new Date(event.evt_ed_dt) : startDate;
-                                endDate.setHours(0, 0, 0, 0); // 시분초 초기화
+                        if (!response.ok) throw new Error("HTTP error " + response.status);
 
-                                return {
-                                    title: "[" + event.cor_nm + "] " + event.evt_title,
-                                    start: startDate, // ISO 형식 (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss)
-                                    end: endDate || startDate, // 종료 날짜 없으면 시작 날짜로 설정
-                                    description: event.evt_dt_link || "No description",
-                                    backgroundColor: event.cor_color,
-                                    borderColor: event.cor_color,
-                                    textColor: "white",
-                                    className: 'blur-effect',
-                                    cor_no : event.cor_no
-                                };
-                            });
-                        },
-                        failure: function () {
-                            alert("이벤트를 불러오는 데 실패했습니다.");
-                        }
+                        const data = await response.json();
+
+                       // 이벤트 데이터 변환
+                        const events = data.map(event => {
+                            const startDate = new Date(event.evt_st_dt);  // 시작 날짜
+                            startDate.setHours(0, 0, 0, 0); // 시분초 초기화
+
+                            const endDate = event.evt_ed_dt ? new Date(event.evt_ed_dt) : startDate;
+                            endDate.setHours(0, 0, 0, 0); // 시분초 초기화
+
+                            return {
+                                title: "[" + event.cor_nm + "] " + event.evt_title,
+                                start: startDate, // ISO 형식 (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss)
+                                end: endDate || startDate, // 종료 날짜 없으면 시작 날짜로 설정
+                                description: event.evt_dt_link || "No Link",
+                                backgroundColor: event.cor_color,
+                                borderColor: event.cor_color,
+                                textColor: "white",
+                                className: "blur-effect",
+                                cor_no: event.cor_no
+                            };
+                        });
+
+                        successCallback(events);
+                    } catch (error) {
+                        console.error("Error loading events:", error);
+                        failureCallback(error);
                     }
-                ],
+                },
+
                 datesSet: function(info) {
                     markHolidays();
 
