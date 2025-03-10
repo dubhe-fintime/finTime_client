@@ -266,6 +266,15 @@
 
                     // 사이드바 열기
                     document.getElementById('eventSidebar').classList.add('active');
+
+                    // 이벤트 클릭시 이벤트 상세로 초기화
+                    $(".contents").show()
+                    $(".article_content").hide()
+                    $(".video_content").hide()
+
+                    document.getElementById('tab1').classList.add('active');
+                    document.getElementById('tab2').classList.remove('active');
+                    document.getElementById('tab3').classList.remove('active');
                 },
                 eventDidMount: function(info) {
                     // 시간 요소를 숨기기
