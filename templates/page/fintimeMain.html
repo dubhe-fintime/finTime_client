@@ -63,8 +63,8 @@
         <button class="btn primary sm active" id="allBtn" onclick="changeCalendar(this)">전체</button>
         <button class="btn primary sm" id="bankBtn" onclick="changeCalendar(this)">은행</button>
         <button class="btn primary sm" id="cardBtn" onclick="changeCalendar(this)">카드</button>
-        <button class="btn primary sm" id="insuranceBtn" onclick="changeCalendar(this)">보험</button>
         <button class="btn primary sm" id="securitiesBtn" onclick="changeCalendar(this)">증권</button>
+        <button class="btn primary sm" id="insuranceBtn" onclick="changeCalendar(this)">보험</button>
     </div>
     <script>
         let holidayModified = false; // 제목이 수정되었는지 확인하는 플래그
@@ -472,11 +472,11 @@
             case "card":
                 cor_group = "003";
                 break;
-            case "insurance":
-                cor_group = "004";
-                break;
             case "securities":
                 cor_group = "002";
+                break;
+            case "insurance":
+                cor_group = "004";
                 break;
             default:
                 cor_group = ""; // 기본 값 추가 (옵션)
