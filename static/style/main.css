@@ -310,20 +310,32 @@ body {
 #calendar {
     max-width: 100%;
     margin: 0 auto;
+    padding-bottom: 80px; /* 하단 버튼 공간을 고려하여 여백 추가 */
 }
 
-/* 화면 크기에 따른 캘린더 크기 조정 */
+/* 웹용(데스크탑) 스타일 */
+@media (min-width: 769px) {
+    #calendar {
+        width: 100%;
+        padding: 0 10px;
+        padding-bottom: 80px; /* 웹에서도 하단 버튼 공간을 고려하여 여백 추가 */
+    }
+}
+
+/* 모바일 스타일 */
 @media (max-width: 768px) {
     #calendar {
         width: 100%;
         padding: 0 10px;
+        padding-bottom: 80px; /* 하단 버튼 공간을 고려하여 여백 추가 */
     }
 }
 
 @media (max-width: 480px) {
     #calendar {
         width: 100%;
-        padding: 0;
+        padding: 0 10px;
+        padding-bottom: 80px; /* 하단 버튼 공간을 고려하여 여백 추가 */
     }
 }
 
@@ -665,4 +677,38 @@ body {
     .fc-event-title {
         font-size: 10px !important; /* 더 작은 화면에서는 더 줄이기 */
     }
+}
+
+.fixed-bottom-buttons {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px;
+    background-color: #f8f9fa;
+    z-index: 1000;  /* 버튼들이 화면 최상단에 위치하도록 z-index 추가 */
+}
+
+.fixed-bottom-buttons .btn {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    flex-grow: 1;
+}
+
+.fixed-bottom-buttons .btn:hover {
+    background-color: #0056b3;
+}
+
+.fixed-bottom-buttons .btn.active {
+    background-color: #0056b3; /* 더 어두운 파란색 */
+    color: #fff;
+    font-weight: bold;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
