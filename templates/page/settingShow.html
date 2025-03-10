@@ -276,16 +276,17 @@
         $(".corGp").on("click", function() {
             ClickSelectOption('corGp_2','전체','')
             let strongName = $(this).closest(".select-box").find("strong").attr("name")
-            if(!strongName){$("#dataContent_1 tr").show()}
-
+            
             $("#dataContent_1 tr").each(function() {
-                if ($(this).data("group") === strongName) {
+                if ($(this).data("group") == strongName) {
                     $(this).show(); // data-group이 1인 경우 보여줌
                 } else {
                     $(this).hide(); // 그 외의 경우 숨김
                 }
             });
-
+            
+            if(!strongName){$("#dataContent_1 tr").show()}
+            
             var uniqueData = total_data
                 .filter((data) => data.cor_gp == strongName) 
                 .reduce((acc, current) => {
@@ -302,6 +303,8 @@
 
             $("#corGp_2_body").empty()
             $("#corGp_2_body").append(li_value)
+            $("#dataContent_1").show()
+            $("#dataContent_2").hide()
             evt_showHide()
         });
 
