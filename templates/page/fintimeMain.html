@@ -264,7 +264,25 @@
                         failureCallback(error);
                     }
                 },
+                eventContent: function(info) {
+                    const ciImageUrl = `https://admin.fin-time.com/resources/ci/ci_${info.event.extendedProps.cor_no}.svg`;
+                    
+                     // 조건에 따라 반환할 HTML을 미리 설정
+                    let html = "";
 
+                    if(info.event.extendedProps.cor_group == "ipo") {
+                        html = `<span>${info.event.title}</span>`;
+                    } else {
+                        html = `
+                            <span style="display: flex; align-items: center;">
+                                ${ciImageUrl ? `<img src="${ciImageUrl}" alt="" style="width:16px; height:16px; margin-right:5px;">` : ""}
+                                <span>${info.event.title}</span>
+                            </span>
+                        `;
+                    }
+
+                    return { html }; // HTML을 객체로 반환
+                },
                 datesSet: function(info) {
                     markHolidays();
 
