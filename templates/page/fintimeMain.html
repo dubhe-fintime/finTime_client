@@ -254,7 +254,8 @@
                                 textColor: "white",
                                 className: "blur-effect",
                                 cor_no: event.cor_no,
-                                cor_group: event.cor_group
+                                cor_group: event.cor_group,
+                                cor_pri_img_url: event.cor_pri_img_url
                             };
                         });
 
@@ -265,7 +266,7 @@
                     }
                 },
                 eventContent: function(info) {
-                    const ciImageUrl = `https://admin.fin-time.com/resources/ci/ci_${info.event.extendedProps.cor_no}.svg`;
+                    const ciImageUrl = `https://admin.fin-time.com${info.event.extendedProps.cor_pri_img_url}`;
                     
                      // 조건에 따라 반환할 HTML을 미리 설정
                     let html = "";
