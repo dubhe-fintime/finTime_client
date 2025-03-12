@@ -742,7 +742,7 @@ body {
     justify-content: space-between;
     gap: 10px;
     padding: 10px;
-    background-color: #f8f9fa;
+    background-color: var(--blue300);
     z-index: 1000;  /* 버튼들이 화면 최상단에 위치하도록 z-index 추가 */
     flex-wrap: nowrap; /* 버튼들이 한 줄로만 표시되도록 설정 */
     box-sizing: border-box; /* 패딩을 포함한 크기를 설정 */
