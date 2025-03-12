@@ -222,11 +222,14 @@ body {
     margin-bottom: 3px;
 }
 
+.fc .fc-scrollgrid {
+    border-left: none;
+}
 
 /* 바텀 시트 > TAB START */
 .tabs {
     display: flex;
-    width: 90%;
+    width: 95%;
     position: relative
 }
 
