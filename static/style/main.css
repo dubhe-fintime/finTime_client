@@ -640,6 +640,12 @@ body {
     border: 2px solid white;
 }
 
+.fc .fc-toolbar-chunk {
+    width: auto;
+    display: flex;
+    justify-content: center;
+}
+
 /*****************************************
  * 🔹 5. 반응형 스타일 (모바일 최적화)
  *****************************************/
@@ -656,7 +662,7 @@ body {
     .fc .fc-button {
         padding: 5px 8px;
         font-size: 10px;
-        margin: 0 4px;
+        margin: 0;
     }
 
     .fc .fc-prev-button,
