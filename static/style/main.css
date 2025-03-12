@@ -746,7 +746,7 @@ body {
 }
 
 .fixed-bottom-buttons .btn {
-    background-color: #007bff;
+    background-color: var(--blue600);
     color: white;
     border: none;
     padding: 8px 15px;  /* 버튼 패딩을 조금 줄여서 크기 조정 */
@@ -757,11 +757,11 @@ body {
 }
 
 .fixed-bottom-buttons .btn:hover {
-    background-color: #0056b3;
+    background-color: var(--blue600);
 }
 
 .fixed-bottom-buttons .btn.active {
-    background-color: #0056b3; /* 더 어두운 파란색 */
+    background-color: var(--blue900); /* 더 어두운 파란색 */
     color: #fff;
     font-weight: bold;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
