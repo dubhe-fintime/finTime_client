@@ -29,11 +29,11 @@
         <h2 onclick="location.reload()">Fin-Time</h2>
         <div>
             <button class="btn primary sm" id="scrollToTopBtn"onclick="scrollToTop()">▲</button>
-            <button class="btn primary sm" id="mypageBtn"onclick="goTopage(this)">☰</button>
+            <button class="btn primary sm" id="setShowBtn"onclick="goTopage(this)">☰</button>
         </div>
     </div>
 
-    <div id="calendar"></div>
+    <div class="calendar" id="calendar"></div>
     <!-- 사이드바 추가 -->
     <div class="eventBottom" id="eventSidebar">
         <div class="top">
@@ -47,15 +47,40 @@
 
         <div class="contents">
             <input type="text" id="cor_no" style="display: none;">
-            <p class="contents-p"><strong>Title:</strong> <span id="sidebarEventTitle"></span></p>
-            <p class="contents-p"><strong>Start:</strong> <span id="sidebarEventStart"></span></p>
-            <p class="contents-p"><strong>End:</strong> <span id="sidebarEventEnd"></span></p>
-            <p class="contents-p"><strong>Detail Link:</strong> <span id="sidebarEventDescription"></span></p>
+            <p class="contents-p"><strong>이벤트 제목:</strong> <span id="sidebarEventTitle"></span></p>
+            <p class="contents-p"><strong>시작일:</strong> <span id="sidebarEventStart"></span></p>
+            <p class="contents-p"><strong>종료일:</strong> <span id="sidebarEventEnd"></span></p>
+            <p class="contents-p"><strong>상세링크:</strong> <span id="sidebarEventDescription"></span></p>
         </div>
         
-
         <div class="article_content" style="display: none;"></div>
         <div class="video_content" style="display: none;"></div>
+    </div>
+
+    <div class="eventBottom" id="ipoSiderbar">
+        <div class="top">
+            <button class="close-btn" onclick="closeSidebar()">닫기</button>
+        </div>
+
+        <div class="contents">
+            <p class="contents-p"><strong>종목명:</strong> <span id="sidebarIPOEventTitle"></span></p>
+            <p class="contents-p"><strong>시작일:</strong> <span id="sidebarIPOEventStart"></span></p>
+            <p class="contents-p"><strong>종료일:</strong> <span id="sidebarIPOEventEnd"></span></p>
+            <p class="contents-p"><strong>확정 공모가:</strong> <span id="sidebarIPOConPubOffPrice"></span></p>
+            <p class="contents-p"><strong>희망 공모가:</strong> <span id="sidebarIPOHopePubOffPrice"></span></p>
+            <p class="contents-p"><strong>청약 경쟁률:</strong> <span id="sidebarIPORate"></span></p>
+            <p class="contents-p"><strong>주간사:</strong> <span id="sidebarIPOEChiefEditor"></span></p>
+        </div>
+    </div>
+
+    <!-- 하단 고정 버튼 추가 -->
+    <div class="fixed-bottom-buttons">
+        <button class="btn primary sm active" id="allBtn" onclick="changeCalendar(this)">전체</button>
+        <button class="btn primary sm" id="bankBtn" onclick="changeCalendar(this)">은행</button>
+        <button class="btn primary sm" id="cardBtn" onclick="changeCalendar(this)">카드</button>
+        <button class="btn primary sm" id="securitiesBtn" onclick="changeCalendar(this)">증권</button>
+        <button class="btn primary sm" id="insuranceBtn" onclick="changeCalendar(this)">보험</button>
+        <button class="btn primary sm" id="ipostockBtn" onclick="changeCalendar(this)">공모주</button>
     </div>
     <script>
         let holidayModified = false; // 제목이 수정되었는지 확인하는 플래그
@@ -65,6 +90,8 @@
         var popoverElement //팝오버랑 바텀시트가 동시에 닫히는 문제 발생 -> flag 
         var newsList
         var videoList
+        var calendarEvents
+        var calendarIPOEvents
         
 
         $(document).ready(function () {
@@ -89,6 +116,7 @@
                     });
                     requestNews()
                     requestVideos()
+                    reuqestIPOStock()
                     
                     initCalendar();
                 },
@@ -124,6 +152,57 @@
             });
         }
 
+        function reuqestIPOStock() {
+            $.ajax({
+                url: "{{api_domain}}/getIPOStock",
+                type: "POST",
+                contentType: "application/json",  // Content-Type을 json으로 설정
+                data: JSON.stringify({
+                    id: localStorage.getItem("id")
+                }),
+                success: function (response) {
+                    calendarIPOEvents = response.map(event => {
+                        const startDate = new Date(event.sub_st_dt);  // 시작 날짜
+                        const endDate = event.sub_ed_date ? new Date(event.sub_ed_date) : startDate;
+
+                        const today = new Date();
+                        today.setHours(0, 0, 0, 0);  // 오늘 날짜의 시간을 00:00:00으로 초기화
+
+                        const tempStartDate = new Date(event.sub_st_dt);
+                        tempStartDate.setHours(0, 0, 0, 0);  // 시간 초기화
+
+                        const tempEndDate = event.sub_ed_date ? new Date(event.sub_ed_date) : startDate;
+                        tempEndDate.setHours(23, 59, 59, 999);  // 종료 날짜는 하루 끝까지 포함되도록 설정
+
+                        // 오늘 날짜가 이벤트 기간 내에 있는지 확인
+                        const isTodayInRange = today >= tempStartDate && today <= tempEndDate;
+
+                        // 배경색 변경
+                        const backgroundColor = isTodayInRange ? "#FF0000" : event.cor_color; // 오늘 포함되면 빨간색, 아니면 원래 색
+
+
+                        return {
+                            title: "[" + event.chief_editor + "] " + event.stock_nm,
+                            start: startDate, // ISO 형식 (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss)
+                            end: endDate || startDate, // 종료 날짜 없으면 시작 날짜로 설정
+                            backgroundColor: backgroundColor,
+                            borderColor: backgroundColor,
+                            textColor: "white",
+                            className: "blur-effect",
+                            conPubOffPrice: event.con_pub_off_price,
+                            hopePubOffPrice: event.hope_pub_off_price,
+                            rate: event.sub_com_rate,
+                            chiefEditor: event.chief_editor,
+                            cor_group: "ipo"
+                        };
+                    });
+                },
+                error: function () {
+                    alert("공모주 가져오기 실패");
+                }
+            });
+        }
+
         function initCalendar() {
             calendarEl = document.getElementById('calendar');
             calendar = new FullCalendar.Calendar(calendarEl, {
@@ -141,37 +220,70 @@
                     month: '2-digit'
                 },
                 eventOrder: "cor_no,start", // 특정 필드 기준으로 정렬
-                eventSources: [
-                    {
-                        url: "{{api_domain}}/getEventMst",  // API 엔드포인트
-                        method: "POST",
-                        success: function (response) {
-                            // 서버에서 받은 데이터(response)를 FullCalendar 형식으로 변환
-                            return response.map(event => {
-                                const startDate = new Date(event.evt_st_dt);  // 시작 날짜
-                                startDate.setHours(0, 0, 0, 0); // 시분초 초기화
+                events: async function(fetchInfo, successCallback, failureCallback) {
+                    try {
+                        const response = await fetch("{{api_domain}}/getEventMst", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({
+                                id: localStorage.getItem("id")
+                            })
+                        });
 
-                                const endDate = event.evt_ed_dt ? new Date(event.evt_ed_dt) : startDate;
-                                endDate.setHours(0, 0, 0, 0); // 시분초 초기화
+                        if (!response.ok) throw new Error("HTTP error " + response.status);
 
-                                return {
-                                    title: "[" + event.cor_nm + "] " + event.evt_title,
-                                    start: startDate, // ISO 형식 (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss)
-                                    end: endDate || startDate, // 종료 날짜 없으면 시작 날짜로 설정
-                                    description: event.evt_dt_link || "No description",
-                                    backgroundColor: event.cor_color,
-                                    borderColor: event.cor_color,
-                                    textColor: "white",
-                                    className: 'blur-effect',
-                                    cor_no : event.cor_no
-                                };
-                            });
-                        },
-                        failure: function () {
-                            alert("이벤트를 불러오는 데 실패했습니다.");
-                        }
+                        const data = await response.json();
+
+                       // 이벤트 데이터 변환
+                       calendarEvents = data.map(event => {
+                            const startDate = new Date(event.evt_st_dt);  // 시작 날짜
+                            startDate.setHours(0, 0, 0, 0); // 시분초 초기화
+
+                            const endDate = event.evt_ed_dt ? new Date(event.evt_ed_dt) : startDate;
+                            endDate.setHours(0, 0, 0, 0); // 시분초 초기화
+
+                            return {
+                                title: "[" + event.cor_nm + "] " + event.evt_title,
+                                start: startDate, // ISO 형식 (YYYY-MM-DD or YYYY-MM-DDTHH:mm:ss)
+                                end: endDate || startDate, // 종료 날짜 없으면 시작 날짜로 설정
+                                description: event.evt_dt_link || "No Link",
+                                backgroundColor: event.cor_color,
+                                borderColor: event.cor_color,
+                                textColor: "white",
+                                className: "blur-effect",
+                                cor_no: event.cor_no,
+                                cor_group: event.cor_group,
+                                cor_pri_img_url: event.cor_pri_img_url
+                            };
+                        });
+
+                        successCallback(calendarEvents);
+                    } catch (error) {
+                        console.error("Error loading events:", error);
+                        failureCallback(error);
                     }
-                ],
+                },
+                eventContent: function(info) {
+                    const ciImageUrl = `https://admin.fin-time.com${info.event.extendedProps.cor_pri_img_url}`;
+                    
+                     // 조건에 따라 반환할 HTML을 미리 설정
+                    let html = "";
+
+                    if(info.event.extendedProps.cor_group == "ipo") {
+                        html = `<span>${info.event.title}</span>`;
+                    } else {
+                        html = `
+                            <span style="display: flex; align-items: center;">
+                                ${ciImageUrl ? `<img src="${ciImageUrl}" alt="" style="width:16px; height:16px; margin-right:5px;">` : ""}
+                                <span>${info.event.title}</span>
+                            </span>
+                        `;
+                    }
+
+                    return { html }; // HTML을 객체로 반환
+                },
                 datesSet: function(info) {
                     markHolidays();
 
@@ -251,21 +363,48 @@
                 eventClick: function(info) {
                     // 클릭한 이벤트 정보
                     const event = info.event;
-                    popoverElement = $(info.jsEvent.currentTarget);
+
+                    if(event.extendedProps.cor_group == "ipo") {
+
+                        let formattedHopePubOffPrice = event.extendedProps.hopePubOffPrice.split("~").map(num => isNaN(Number(num)) ? num : Number(num).toLocaleString()).join("~");
+
+                        document.getElementById('ipoSiderbar').classList.add('active');
+                        document.getElementById('sidebarIPOEventTitle').textContent = event.title;
+                        document.getElementById('sidebarIPOEventStart').textContent = event.start.toLocaleString();
+                        document.getElementById('sidebarIPOEventEnd').textContent = event.end.toLocaleString();
+                        document.getElementById('sidebarIPOConPubOffPrice').textContent = isNaN(Number(event.extendedProps.conPubOffPrice)) ? event.extendedProps.conPubOffPrice : Number(event.extendedProps.conPubOffPrice).toLocaleString();
+                        document.getElementById('sidebarIPOHopePubOffPrice').textContent = formattedHopePubOffPrice;
+                        document.getElementById('sidebarIPORate').textContent = event.extendedProps.rate ? event.extendedProps.rate : "N/A";
+                        document.getElementById('sidebarIPOEChiefEditor').textContent = event.extendedProps.chiefEditor;
+
+                    } else {
+                        popoverElement = $(info.jsEvent.currentTarget);
                     
-                    //02/26 추가 ㅊㅇㅎ
-                    $("#cor_no").val(event.extendedProps.cor_no)
+                        //02/26 추가 ㅊㅇㅎ
+                        $("#cor_no").val(event.extendedProps.cor_no)
 
-                    // 사이드바 내용 업데이트
-                    document.getElementById('sidebarEventTitle').textContent = event.title;
-                    document.getElementById('sidebarEventStart').textContent = event.start.toLocaleString();
-                    document.getElementById('sidebarEventEnd').textContent = event.end ? event.end.toLocaleString() : 'N/A';
-                    document.getElementById('sidebarEventDescription').innerHTML = event.extendedProps.description 
-                        ? `<a href="${event.extendedProps.description}" target="_blank">${event.extendedProps.description}</a>` 
-                        : 'No Link';
+                        // 사이드바 내용 업데이트
+                        document.getElementById('sidebarEventTitle').textContent = event.title;
+                        document.getElementById('sidebarEventStart').textContent = event.start.toLocaleString();
+                        document.getElementById('sidebarEventEnd').textContent = event.end ? event.end.toLocaleString() : 'N/A';
+                        document.getElementById('sidebarEventDescription').innerHTML = event.extendedProps.description 
+                            ? `<a href="${event.extendedProps.description}" target="_blank">${event.extendedProps.description}</a>` 
+                            : 'No Link';
 
-                    // 사이드바 열기
-                    document.getElementById('eventSidebar').classList.add('active');
+                        // 사이드바 열기
+                        document.getElementById('eventSidebar').classList.add('active');
+
+                        // 이벤트 클릭시 이벤트 상세로 초기화
+                        $(".contents").show()
+                        $(".article_content").hide()
+                        $(".video_content").hide()
+
+                        document.getElementById('tab1').classList.add('active');
+                        document.getElementById('tab2').classList.remove('active');
+                        document.getElementById('tab3').classList.remove('active');
+                    }
+
+                    
                 },
                 eventDidMount: function(info) {
                     // 시간 요소를 숨기기
@@ -341,6 +480,8 @@
 
         // 사이드바 닫기 함수
         function closeSidebar() {
+            document.getElementById('ipoSiderbar').classList.remove('active');
+
             document.getElementById('eventSidebar').classList.remove('active');
             document.getElementById('tab1').classList.add('active');
             document.getElementById('tab2').classList.remove('active');
@@ -418,6 +559,56 @@
         })
         }
         $(".video_content").append(value)
+    }
+
+    function changeCalendar(e) {
+        // 모든 버튼에서 active 제거
+        document.querySelectorAll(".fixed-bottom-buttons .btn").forEach(btn => {
+            btn.classList.remove("active");
+        });
+
+        // 클릭한 버튼에 active 추가
+        e.classList.add("active");
+        
+        let target = e.id.replace("Btn", "")
+        let cor_group;
+
+        switch (target) {
+            case "bank":
+                cor_group = "001";
+                break;
+            case "card":
+                cor_group = "003";
+                break;
+            case "securities":
+                cor_group = "002";
+                break;
+            case "insurance":
+                cor_group = "004";
+                break;
+            case "ipostock":
+                cor_group = "ipo";
+                break;
+            default:
+                cor_group = ""; // 기본 값 추가 (옵션)
+        }
+
+        if (cor_group === "") {
+            // 전체 이벤트 표시
+            calendar.removeAllEventSources();
+            calendar.addEventSource(calendarEvents);
+        } else if (cor_group === "ipo") {
+            calendar.removeAllEventSources();
+            calendar.addEventSource(calendarIPOEvents);
+        } else {
+            let filteredEvents = calendarEvents.filter(event => event?.cor_group == cor_group);
+
+            // 기존 이벤트 제거
+            calendar.removeAllEventSources();
+
+            // 필터링된 이벤트 추가
+            calendar.addEventSource(filteredEvents);
+        }
     }
 
     function scrollToTop() {

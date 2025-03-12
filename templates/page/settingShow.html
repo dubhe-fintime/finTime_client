@@ -137,16 +137,16 @@
     <header class="header">
         <button class="menu-toggle btn tertiary sm">☰</button>
         <h2>FIN-TIME 마이페이지</h2>
-        <button class="btn tertiary sm" onclick="history.back()">뒤로가기</button>
+        <button class="btn tertiary sm" id="mainBtn" onclick="goTopage(this)">HOME</button>
     </header>
 
     <nav class="lnb">
         <div class="lnb-content">
             <ul class="depth2">
-                <li><a id="setShowBtn" class="depth3" href="#" onclick="goTopage(this)" data-page="menu1">캘린더 설정</a></li>
+                <li><a id="mypageBtn" class="depth3" href="#" onclick="goTopage(this)" data-page="menu2">마이페이지</a></li>
             </ul>
             <ul class="depth2">
-                <li><a class="depth3" href="#" onclick="" data-page="menu2">메뉴2</a></li>
+                <li><a id="setShowBtn" class="depth3" href="#" onclick="goTopage(this)" data-page="menu2">캘린더 설정</a></li>
             </ul>
         </div>
     </nav>
@@ -276,16 +276,17 @@
         $(".corGp").on("click", function() {
             ClickSelectOption('corGp_2','전체','')
             let strongName = $(this).closest(".select-box").find("strong").attr("name")
-            if(!strongName){$("#dataContent_1 tr").show()}
-
+            
             $("#dataContent_1 tr").each(function() {
-                if ($(this).data("group") === strongName) {
+                if ($(this).data("group") == strongName) {
                     $(this).show(); // data-group이 1인 경우 보여줌
                 } else {
                     $(this).hide(); // 그 외의 경우 숨김
                 }
             });
-
+            
+            if(!strongName){$("#dataContent_1 tr").show()}
+            
             var uniqueData = total_data
                 .filter((data) => data.cor_gp == strongName) 
                 .reduce((acc, current) => {
@@ -302,6 +303,8 @@
 
             $("#corGp_2_body").empty()
             $("#corGp_2_body").append(li_value)
+            $("#dataContent_1").show()
+            $("#dataContent_2").hide()
             evt_showHide()
         });
 
