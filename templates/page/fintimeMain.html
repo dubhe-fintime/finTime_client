@@ -270,9 +270,9 @@
                     const defaultImageUrl  = 'https://admin.fin-time.com/resources/ci/ci_999.svg'
            
                     return { 
-                        html : `<span style="display: flex; align-items: center;">
-                                ${ciImageUrl ? `<img src="${ciImageUrl}" alt="" style="width:16px; height:16px; margin-right:5px;" onerror="this.onerror=null; this.src='${defaultImageUrl}';">` 
-                                            : ""}
+                        html : `
+                            <span style="display: flex; align-items: center;">
+                                <img src="${ciImageUrl}" alt="" style="width:16px; height:16px; margin-right:5px;" onerror="this.onerror=null; this.src='${defaultImageUrl}';">
                                 <span>${info.event.title}</span>
                             </span>
                         `
