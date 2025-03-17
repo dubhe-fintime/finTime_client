@@ -12,9 +12,6 @@ body {
     margin-top: 60px; /* 헤더의 높이에 맞게 조정 */
 }
 
-a{
-    width: 100%;
-}
 
 .header {
     background: var(--blue900);
