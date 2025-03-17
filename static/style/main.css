@@ -289,7 +289,10 @@ body {
     height: 30px; /* 원하는 크기로 조정 */
     margin-right: 10px; /* 제목과의 간격 */
   }
-  
+  .article_a{
+    width: 100%;
+  }
+
   .article-item:hover {
     background: #f9f9f9;
   }
@@ -330,6 +333,8 @@ body {
     transition: background 0.2s;
     flex-direction: column;
 }
+
+
 .video-item strong,
 .video-title {
     width: 100%;
