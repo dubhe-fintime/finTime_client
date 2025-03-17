@@ -141,7 +141,7 @@
 
         function requestVideos() {
             $.ajax({
-                url: "{{api_domain}}/getYoutube",
+                url: "{{api_domain}}/getYoutubeClient",
                 type: "POST",
                 success: function (response) {
                     videoList = response
