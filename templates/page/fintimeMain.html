@@ -96,6 +96,7 @@
 
         $(document).ready(function () {
             requestHoliday();
+            requestIndexList()
         })
 
 
@@ -148,6 +149,19 @@
                 },
                 error: function () {
                     alert("뉴스 기사 가져오기 실패");
+                }
+            });
+        }
+
+        function requestIndexList() {
+            $.ajax({
+                url: "{{api_domain}}/getIndexList",
+                type: "POST",
+                success: function (response) {
+                    console.log(response)
+                },
+                error: function () {
+                    alert("실시간 지수 실패");
                 }
             });
         }
