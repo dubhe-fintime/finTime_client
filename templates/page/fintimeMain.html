@@ -280,8 +280,10 @@
                     }
                 },
                 eventContent: function(info) {
-                    const ciImageUrl = `https://admin.fin-time.com${info.event.extendedProps.cor_pri_img_url}`;
                     const defaultImageUrl  = 'https://admin.fin-time.com/resources/ci/ci_999.svg'
+                    const ciImageUrl = info.event.extendedProps.cor_pri_img_url 
+                                    ? `https://admin.fin-time.com${info.event.extendedProps.cor_pri_img_url}` 
+                                    : defaultImageUrl;
            
                     return { 
                         html : `
