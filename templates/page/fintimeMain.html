@@ -73,8 +73,15 @@
         </div>
     </div>
 
+
     <!-- 하단 고정 버튼 추가 -->
     <div class="fixed-bottom-buttons">
+        <div class="slider-container" style="display: none;" >
+            <div class="slider-wrapper"></div>
+            <button class="slider-button prev" id="prevBtn" disabled>◀</button>
+            <button class="slider-button next" id="nextBtn">▶</button>
+          </div>
+        
         <button class="btn primary sm active" id="allBtn" onclick="changeCalendar(this)">전체</button>
         <button class="btn primary sm" id="bankBtn" onclick="changeCalendar(this)">은행</button>
         <button class="btn primary sm" id="cardBtn" onclick="changeCalendar(this)">카드</button>
@@ -158,7 +165,14 @@
                 url: "{{api_domain}}/getIndexList",
                 type: "POST",
                 success: function (response) {
-                    console.log(response)
+                console.log(response)
+                value = ""
+                response.forEach((v,i)=>{
+                    value += `<div class="slide">${v.name} : ${v.end}</div>`
+                    
+                })
+                $(".slider-wrapper ").append(value)
+                test()
                 },
                 error: function () {
                     alert("실시간 지수 실패");
@@ -570,6 +584,8 @@
     }
 
     function changeCalendar(e) {
+        $(".slider-container").hide()
+        
         // 모든 버튼에서 active 제거
         document.querySelectorAll(".fixed-bottom-buttons .btn").forEach(btn => {
             btn.classList.remove("active");
@@ -590,6 +606,7 @@
                 break;
             case "securities":
                 cor_group = "002";
+                $(".slider-container").show()
                 break;
             case "insurance":
                 cor_group = "004";
@@ -634,6 +651,52 @@
         $(`#${$(e.target).data("tabNumber")}`).addClass("active");
     });
 
+    function test(){
+            //배너 
+    const sliderWrapper = document.querySelector('.slider-wrapper');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+
+    let currentIndex = 0;
+    const totalSlides = document.querySelectorAll('.slide').length;
+    const element = document.querySelectorAll('.slide')[1];
+
+    function updateSlidePosition() {
+        var widthWithPx = window.getComputedStyle(element).width;
+        var slideWidth = parseInt(widthWithPx, 10);
+        sliderWrapper.style.transform = `translateX(${-currentIndex * slideWidth}px)`;
+        prevBtn.disabled = currentIndex === 0;
+        nextBtn.disabled = currentIndex === totalSlides - 2;
+    }
+
+    nextBtn.addEventListener('click', () => {
+      if (currentIndex < totalSlides - 1) {
+        currentIndex++;
+        console.log(currentIndex)
+        updateSlidePosition();
+      }
+    });
+
+    prevBtn.addEventListener('click', () => {
+      if (currentIndex > 0) {
+        currentIndex--;
+        console.log(currentIndex)
+        updateSlidePosition();
+      }
+    });
+
+    }
+
+
+
+    //화면 사이즈 변경시
+    window.addEventListener('resize', function() {
+        widthWithPx = window.getComputedStyle(element).width;
+        console.log(widthWithPx)
+        slideWidth = parseInt(widthWithPx, 10);
+        sliderWrapper.style.transform = `translateX(${-currentIndex * slideWidth}px)`;
+
+});
 
 
     </script>
