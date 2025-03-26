@@ -721,17 +721,20 @@ body {
         color: white;
     }
 
-      /* 배경색 지정 */
-    .slide:nth-child(1) { background: #ff6b6b; }
-    .slide:nth-child(2) { background: #ffa502; }
-    .slide:nth-child(3) { background: #1e90ff; }
-    .slide:nth-child(4) { background: #2ed573; }
-    .slide:nth-child(5) { background: #8327d8; }
-    .slide:nth-child(6) { background: #a5cc18; }
-    .slide:nth-child(7) { background: #d427a0; }
-    .slide:nth-child(8) { background: #1fbfe7; }
-    .slide:nth-child(9) { background: #ee4c0d; }
-    .slide:nth-child(10) { background: #1d612e; }
+
+
+    /* 배경색 반복 패턴 */
+    .slide:nth-child(10n+1) { background: #ff6b6b; }
+    .slide:nth-child(10n+2) { background: #ffa502; }
+    .slide:nth-child(10n+3) { background: #1e90ff; }
+    .slide:nth-child(10n+4) { background: #2ed573; }
+    .slide:nth-child(10n+5) { background: #8327d8; }
+    .slide:nth-child(10n+6) { background: #a5cc18; }
+    .slide:nth-child(10n+7) { background: #d427a0; }
+    .slide:nth-child(10n+8) { background: #1fbfe7; }
+    .slide:nth-child(10n+9) { background: #ee4c0d; }
+    .slide:nth-child(10n+10) { background: #1d612e; }
+
 
       /* 좌우 버튼 스타일 */
     .slider-button {

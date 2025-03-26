@@ -78,7 +78,7 @@
     <div class="fixed-bottom-buttons">
         <div class="slider-container" style="display: none;" >
             <div class="slider-wrapper"></div>
-            <button class="slider-button prev" id="prevBtn" disabled>◀</button>
+            <!-- <button class="slider-button prev" id="prevBtn" disabled>◀</button> -->
             <button class="slider-button next" id="nextBtn">▶</button>
           </div>
         
@@ -653,41 +653,60 @@
         $(`#${$(e.target).data("tabNumber")}`).addClass("active");
     });
 
-    function test(){
-            //배너 
-    const sliderWrapper = document.querySelector('.slider-wrapper');
-    const prevBtn = document.getElementById('prevBtn');
-    const nextBtn = document.getElementById('nextBtn');
+    function test() {
+        const sliderWrapper = document.querySelector('.slider-wrapper');
+        const nextBtn = document.getElementById('nextBtn');
+        const firstClone = $(".slide")[0].cloneNode(true);
+        const secondeClone = $(".slide")[1].cloneNode(true);
+        firstClone.id = "firstClone";
+        secondeClone.id = "secondeClone";
+        sliderWrapper.appendChild(firstClone);
+        sliderWrapper.appendChild(secondeClone);
 
-    let currentIndex = 0;
-    const totalSlides = document.querySelectorAll('.slide').length;
-    const element = document.querySelectorAll('.slide')[1];
+        // 다시 슬라이드 목록 업데이트
+        slides = document.querySelectorAll('.slide');
+        const totalNewSlides = slides.length;
+        
+        // 슬라이드 시작지점
+        let currentIndex = 0; 
+        function updateSlidePosition(animate = true) {
+            var widthWithPx = window.getComputedStyle(slides[1]).width;
+            var slideWidth = parseInt(widthWithPx, 10);
 
-    function updateSlidePosition() {
-        var widthWithPx = window.getComputedStyle(element).width;
-        var slideWidth = parseInt(widthWithPx, 10);
-        sliderWrapper.style.transform = `translateX(${-currentIndex * slideWidth}px)`;
-        prevBtn.disabled = currentIndex === 0;
-        nextBtn.disabled = currentIndex === totalSlides - 2;
-    }
+            if (animate) { //슬라이드가 진행중인 경우 
+                sliderWrapper.style.transition = "transform 0.4s ease-in-out";
+                sliderWrapper.style.transform = `translateX(${-currentIndex * slideWidth}px)`;
+                return
+            } else { //맨처음일 경우
+                sliderWrapper.style.transition = "none";
+                requestAnimationFrame(() => {
+                    sliderWrapper.style.transform = `translateX(${-currentIndex * slideWidth}px)`;
+                });
+                return
+            }
+        }
 
-    nextBtn.addEventListener('click', () => {
-      if (currentIndex < totalSlides - 1) {
-        currentIndex++;
-        console.log(currentIndex)
-        updateSlidePosition();
-      }
-    });
+        nextBtn.addEventListener('click', () => {
+            if (currentIndex < totalNewSlides - 1) {
+                currentIndex++;
+                updateSlidePosition();
+            }
+        });
 
-    prevBtn.addEventListener('click', () => {
-      if (currentIndex > 0) {
-        currentIndex--;
-        console.log(currentIndex)
-        updateSlidePosition();
-      }
-    });
+        // 트랜지션 끝나면 무한 루프 처리
+        sliderWrapper.addEventListener("transitionend", () => {
+            if (slides[currentIndex].id === "secondeClone") {
+                currentIndex = 1;
+                updateSlidePosition(false); // 애니메이션 없이 순간 이동
+            }
+        });
+        updateSlidePosition(false); 
 
-    }
+} 
+
+
+
+
 
 
 
