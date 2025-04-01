@@ -121,6 +121,10 @@ def setShow():
     #return render_template("common/login.html", domain=domain, port=port)
     return render_template("page/settingShow.html", domain=front_domain, api_domain=api_domain)
 
+@app.route("/productInfo")
+def productInfo():
+    return render_template("page/productInfo.html", domain=front_domain, api_domain=api_domain)
+
 if __name__ == "__main__": 
     while True:
         try:

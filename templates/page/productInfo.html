@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FIN-TIME | Product Info </title>
+    <script src="{{ url_for('static', filename='js/crypto-js.js') }}"></script>
+    <link href="{{ url_for('static', filename='style/common.css') }}" rel="stylesheet" />
+    <link href="{{ url_for('static', filename='style/lnb.css') }}" rel="stylesheet" />
+    <script src="{{ url_for('static', filename='js/common.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery-ui.min.js') }}"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+    <style>
+       :root {
+            --blue900: #0044cc;
+        }
+
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-size: 13px; /* 기본 폰트 크기 줄이기 */
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+        }
+
+        .wrapper {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100%;
+        }
+
+        .header {
+            background: var(--blue900);
+            color: white;
+            padding: 10px 20px;
+            width: 100%;
+            height: 60px;
+            position: fixed;
+            top: 0;
+            z-index: 1200;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 16px; /* 헤더의 폰트 크기 */
+        }
+
+        .header h2 { margin: 0; font-size: 18px; }
+        .btn { 
+            padding: 8px 14px; 
+            background: white; 
+            border: none; 
+            cursor: pointer; 
+            border-radius: 5px; 
+            font-size: 13px; /* 버튼 폰트 크기 */
+        }
+
+        .tab-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 60px;
+        }
+
+        .tab {
+            padding: 8px 12px;
+            cursor: pointer;
+            background: #ddd;
+            border: 1px solid #ccc;
+            margin: 0 5px;
+            border-radius: 5px;
+            font-size: 13px; /* 탭 버튼 폰트 크기 */
+        }
+
+        .tab.active {
+            background: var(--blue900);
+            color: white;
+            font-weight: bold;
+        }
+
+        .content-wrapper {
+            flex: 1;
+            padding: 15px;
+            margin-bottom: 40px;
+            overflow-y: auto;
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            padding: 15px;
+            width: 100%;
+            max-width: 700px;
+            border-radius: 10px;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+        }
+
+        .tab-content.active { display: block; }
+
+        .table-container {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            background: white;
+            min-width: 600px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 6px 10px; /* 셀 내부 여백 줄이기 */
+            text-align: center;
+            font-size: 13px; /* 테이블 내용 폰트 크기 */
+            white-space: nowrap; /* 기본적으로 줄바꿈 방지 */
+        }
+
+        tbody td {
+            vertical-align: middle;
+        }
+
+        th {
+            background: var(--blue900);
+            color: white;
+        }
+
+        /* 상품명 열만 크기 조정 & 줄바꿈 허용 */
+        th:nth-child(2), td:nth-child(2) {
+            max-width: 120px;
+            word-wrap: break-word;
+            white-space: normal;
+            line-height: 1.4; /* 줄 간격을 좀 더 조정하여 가독성을 높임 */
+        }
+
+        /* 은행 열에도 두 줄로 나오도록 설정 */
+        th:nth-child(1), td:nth-child(1) {
+            max-width: 120px;
+            word-wrap: break-word;
+            white-space: normal;
+            line-height: 1.4;
+        }
+
+        a { 
+            color: #007bff; 
+            text-decoration: none; 
+            font-weight: bold; 
+            font-size: 13px; /* 링크 폰트 크기 */
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+            body {
+                font-size: 11px; /* 모바일에서 기본 폰트 크기 추가적으로 줄이기 */
+            }
+
+            .tab {
+                font-size: 11px; /* 모바일에서 탭 폰트 크기 */
+                padding: 6px 8px;
+            }
+
+            .btn {
+                font-size: 11px; /* 모바일에서 버튼 폰트 크기 */
+                padding: 6px 8px;
+            }
+
+            table {
+                min-width: 500px;
+            }
+
+            /* 모바일에서는 상품명이 더 짧게 */
+            th:nth-child(2), td:nth-child(2) {
+                max-width: 100px;
+            }
+
+            /* 모바일에서 은행명도 더 짧게 설정 */
+            th:nth-child(1), td:nth-child(1) {
+                max-width: 100px;
+            }
+        }
+
+
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h2>FIN-TIME 상품정보</h2>
+        <button class="btn" id="mainBtn" onclick="goTopage(this)">HOME</button>
+    </header>
+
+    <div class="content-wrapper">
+        <div class="tab-container">
+            <div class="tab active" onclick="openTab('deposit')">예적금</div>
+            <div class="tab" onclick="openTab('loan')">대출</div>
+        </div>
+
+        <div id="deposit" class="tab-content active">
+            <h2>📊 예적금 정보</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>은행</th>
+                            <th>상품명</th>
+                            <th>상품구분</th>
+                            <th>이자방식</th>
+                            <th>기본금리</th>
+                            <th>최대금리</th>
+                            <th>전월취급<br>평균금리</th>
+                            <th>링크</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="loan" class="tab-content">
+            <h2>🏦 대출 정보</h2>
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>은행</th>
+                            <th>상품명</th>
+                            <th>주택종류</th>
+                            <th>금리방식</th>
+                            <th>상환방식</th>
+                            <th>최저금리</th>
+                            <th>최대금리</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+          $(document).ready(function () {
+            requestProduct();
+            requestLoanProduct();
+        })
+
+        function requestProduct() {
+            $.ajax({
+                url: "{{api_domain}}/getFinancialProduct",
+                type: "POST",
+                success: function (response) {
+                    const tbody = document.querySelector("#deposit tbody");
+
+                    // 데이터 반복 처리하여 <tr> 추가
+                    response.forEach(item => {
+                        console.log(item);
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td>${item.cor_nm}</td>
+                            <td>${item.prod_nm}</td>
+                            <td>${item.prod_type}</td>
+                            <td>${item.saving_method}</td>
+                            <td>${item.base_intr}%</td>
+                            <td>${item.max_intr}%</td>
+                            <td>${item.last_avg_intr}%</td>
+                            <td><a href="${item.prod_detail_link}" target="_blank">바로가기</a></td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+                },
+                error: function () {
+                    alert("예적금 상품 정보를를 불러오는 데 실패했습니다.");
+                }
+            });
+        }
+
+        function requestLoanProduct() {
+            $.ajax({
+                url: "{{api_domain}}/getFinancialLoanProduct",
+                type: "POST",
+                success: function (response) {
+                    const tbody = document.querySelector("#loan tbody");
+
+                    // 데이터 반복 처리하여 <tr> 추가
+                        response.forEach(item => {
+                        const row = document.createElement("tr");
+                        row.innerHTML = `
+                            <td>${item.cor_nm}</td>
+                            <td>${item.prod_nm}</td>
+                            <td>${item.residence_type}</td>
+                            <td>${item.intr_method}</td>
+                            <td>${item.repay_method}</td>
+                            <td>${item.min_intr}%</td>
+                            <td>${item.max_intr}%</td>
+                        `;
+                        tbody.appendChild(row);
+                    });
+
+                },
+                error: function () {
+                    alert("대출 상품 정보를를 불러오는 데 실패했습니다.");
+                }
+            });
+        }
+
+        function openTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(button => button.classList.remove('active'));
+    
+            document.getElementById(tabName).classList.add('active');
+            document.querySelector(`.tab-container .tab[onclick="openTab('${tabName}')"]`).classList.add('active');
+        }
+    </script>
+    
+</body>
+</html>
