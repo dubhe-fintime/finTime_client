@@ -253,6 +253,7 @@
             requestLoanProductAvgIntr();
         });
 
+        // 예적금 상품 리스트 조회
         function requestProduct() {
             $.ajax({
                 url: "{{api_domain}}/getFinancialProduct",
@@ -282,6 +283,7 @@
             });
         }
 
+        // 대출 상품 리스트 조회
         function requestLoanProduct() {
             $.ajax({
                 url: "{{api_domain}}/getFinancialLoanProduct",
@@ -310,6 +312,7 @@
             });
         }
 
+        // 예적금 평균 금리 정보 조회
         function requestProductAvgIntr() {
             $.ajax({
                 url: "{{api_domain}}/getFinancialProductAvgIntr",
@@ -326,6 +329,7 @@
             });
         }
 
+        // 대출 상품 평균 금리 정보 조회
         function requestLoanProductAvgIntr() {
             $.ajax({
                 url: "{{api_domain}}/getFinancialLoanProductAvgIntr",
