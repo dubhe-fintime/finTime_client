@@ -13,14 +13,15 @@
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
     <style>
-       :root {
+        /* 기존 스타일 코드 */
+        :root {
             --blue900: #0044cc;
         }
 
         html, body {
             height: 100%;
             margin: 0;
-            font-size: 13px; /* 기본 폰트 크기 줄이기 */
+            font-size: 13px;
             font-family: Arial, sans-serif;
             background: #f4f4f4;
         }
@@ -44,7 +45,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 16px; /* 헤더의 폰트 크기 */
+            font-size: 16px;
         }
 
         .header h2 { margin: 0; font-size: 18px; }
@@ -54,7 +55,7 @@
             border: none; 
             cursor: pointer; 
             border-radius: 5px; 
-            font-size: 13px; /* 버튼 폰트 크기 */
+            font-size: 13px; 
         }
 
         .tab-container {
@@ -70,7 +71,7 @@
             border: 1px solid #ccc;
             margin: 0 5px;
             border-radius: 5px;
-            font-size: 13px; /* 탭 버튼 폰트 크기 */
+            font-size: 13px;
         }
 
         .tab.active {
@@ -114,10 +115,10 @@
 
         th, td {
             border: 1px solid #ddd;
-            padding: 6px 10px; /* 셀 내부 여백 줄이기 */
+            padding: 6px 10px;
             text-align: center;
-            font-size: 13px; /* 테이블 내용 폰트 크기 */
-            white-space: nowrap; /* 기본적으로 줄바꿈 방지 */
+            font-size: 13px;
+            white-space: nowrap;
         }
 
         tbody td {
@@ -134,7 +135,7 @@
             max-width: 120px;
             word-wrap: break-word;
             white-space: normal;
-            line-height: 1.4; /* 줄 간격을 좀 더 조정하여 가독성을 높임 */
+            line-height: 1.4;
         }
 
         /* 은행 열에도 두 줄로 나오도록 설정 */
@@ -149,22 +150,22 @@
             color: #007bff; 
             text-decoration: none; 
             font-weight: bold; 
-            font-size: 13px; /* 링크 폰트 크기 */
+            font-size: 13px;
         }
 
         /* 반응형 디자인 */
         @media (max-width: 768px) {
             body {
-                font-size: 11px; /* 모바일에서 기본 폰트 크기 추가적으로 줄이기 */
+                font-size: 11px;
             }
 
             .tab {
-                font-size: 11px; /* 모바일에서 탭 폰트 크기 */
+                font-size: 11px;
                 padding: 6px 8px;
             }
 
             .btn {
-                font-size: 11px; /* 모바일에서 버튼 폰트 크기 */
+                font-size: 11px;
                 padding: 6px 8px;
             }
 
@@ -172,18 +173,14 @@
                 min-width: 500px;
             }
 
-            /* 모바일에서는 상품명이 더 짧게 */
             th:nth-child(2), td:nth-child(2) {
                 max-width: 100px;
             }
 
-            /* 모바일에서 은행명도 더 짧게 설정 */
             th:nth-child(1), td:nth-child(1) {
                 max-width: 100px;
             }
         }
-
-
     </style>
 </head>
 <body>
@@ -200,6 +197,9 @@
 
         <div id="deposit" class="tab-content active">
             <h2>📊 예적금 정보</h2>
+            <div id="depositAvgIntr">
+                <p id="depositAvgInfo"></p>
+            </div>
             <div class="table-container">
                 <table>
                     <thead>
@@ -222,6 +222,9 @@
 
         <div id="loan" class="tab-content">
             <h2>🏦 대출 정보</h2>
+            <div id="loanAvgIntr">
+                <p id="loanAvgInfo"></p>
+            </div>
             <div class="table-container">
                 <table>
                     <thead>
@@ -243,10 +246,12 @@
     </div>
 
     <script>
-          $(document).ready(function () {
+        $(document).ready(function () {
             requestProduct();
             requestLoanProduct();
-        })
+            requestProductAvgIntr();
+            requestLoanProductAvgIntr();
+        });
 
         function requestProduct() {
             $.ajax({
@@ -255,9 +260,8 @@
                 success: function (response) {
                     const tbody = document.querySelector("#deposit tbody");
 
-                    // 데이터 반복 처리하여 <tr> 추가
+                    // 상품 데이터 반복 처리하여 <tr> 추가
                     response.forEach(item => {
-                        console.log(item);
                         const row = document.createElement("tr");
                         row.innerHTML = `
                             <td>${item.cor_nm}</td>
@@ -273,7 +277,7 @@
                     });
                 },
                 error: function () {
-                    alert("예적금 상품 정보를를 불러오는 데 실패했습니다.");
+                    alert("예적금 상품 정보를 불러오는 데 실패했습니다.");
                 }
             });
         }
@@ -285,8 +289,8 @@
                 success: function (response) {
                     const tbody = document.querySelector("#loan tbody");
 
-                    // 데이터 반복 처리하여 <tr> 추가
-                        response.forEach(item => {
+                    // 대출 상품 데이터 반복 처리하여 <tr> 추가
+                    response.forEach(item => {
                         const row = document.createElement("tr");
                         row.innerHTML = `
                             <td>${item.cor_nm}</td>
@@ -299,10 +303,41 @@
                         `;
                         tbody.appendChild(row);
                     });
-
                 },
                 error: function () {
-                    alert("대출 상품 정보를를 불러오는 데 실패했습니다.");
+                    alert("대출 상품 정보를 불러오는 데 실패했습니다.");
+                }
+            });
+        }
+
+        function requestProductAvgIntr() {
+            $.ajax({
+                url: "{{api_domain}}/getFinancialProductAvgIntr",
+                type: "POST",
+                success: function (response) {
+                    const avgInfo = response.map(item => {
+                        return `${item.prod_type} 기본 금리 평균 : ${parseFloat(item.avg_base_intr).toFixed(2)}%, 최대 금리 평균 : ${parseFloat(item.avg_max_intr).toFixed(2)}%`;
+                    }).join('<br>');
+                    document.getElementById("depositAvgInfo").innerHTML = avgInfo;
+                },
+                error: function () {
+                    alert("예적금 평균 금리 정보를 불러오는 데 실패했습니다.");
+                }
+            });
+        }
+
+        function requestLoanProductAvgIntr() {
+            $.ajax({
+                url: "{{api_domain}}/getFinancialLoanProductAvgIntr",
+                type: "POST",
+                success: function (response) {
+                    const avgInfo = response.map(item => {
+                        return `${item.intr_method} 최저 금리 평균 : ${parseFloat(item.avg_min_intr).toFixed(2)}%, 최대 금리 평균 : ${parseFloat(item.avg_max_intr).toFixed(2)}%`;
+                    }).join('<br>');
+                    document.getElementById("loanAvgInfo").innerHTML = avgInfo;
+                },
+                error: function () {
+                    alert("대출 평균 금리 정보를 불러오는 데 실패했습니다.");
                 }
             });
         }
@@ -310,11 +345,11 @@
         function openTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
             document.querySelectorAll('.tab').forEach(button => button.classList.remove('active'));
-    
+
             document.getElementById(tabName).classList.add('active');
             document.querySelector(`.tab-container .tab[onclick="openTab('${tabName}')"]`).classList.add('active');
         }
     </script>
-    
+
 </body>
 </html>
