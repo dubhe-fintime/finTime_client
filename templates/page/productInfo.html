@@ -186,7 +186,10 @@
 <body>
     <header class="header">
         <h2>FIN-TIME 상품정보</h2>
-        <button class="btn" id="mainBtn" onclick="goTopage(this)">HOME</button>
+        <div>
+            <button class="btn primary sm" id="scrollToTopBtn"onclick="scrollToTop()">▲</button>
+            <button class="btn" id="mainBtn" onclick="goTopage(this)">HOME</button>
+        </div>
     </header>
 
     <div class="content-wrapper">
@@ -353,6 +356,13 @@
             document.getElementById(tabName).classList.add('active');
             document.querySelector(`.tab-container .tab[onclick="openTab('${tabName}')"]`).classList.add('active');
         }
+
+        function scrollToTop() {
+            document.querySelector(".content-wrapper").scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+       }
     </script>
 
 </body>
