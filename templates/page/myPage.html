@@ -175,25 +175,25 @@
         <div class="test">
             <h3>ID</h3>
             <div class="input-wrap sm">
-                <input id="userID" class="input" placeholder="기관번호를 입력 해 주세요" onfocus="FocusInput('userID')" oninput="ChangeInput('userID')" onblur="BlurInput('userID')" value="" required="" disabled>
+                <input id="userID" class="input" onfocus="FocusInput('userID')" oninput="ChangeInput('userID')" onblur="BlurInput('userID')" value="" required="" disabled>
                 <span class="delete-btn" onclick="DeleteInput('userID')"></span>
             </div>
             
             <h3>고객명</h3>
             <div class="input-wrap sm">
-                <input id="userNm" class="input" placeholder="기관번호를 입력 해 주세요" onfocus="FocusInput('userNm')" oninput="ChangeInput('userNm')" onblur="BlurInput('userNm')" value="" required="">
+                <input id="userNm" class="input" placeholder="이름을 입력 해 주세요" onfocus="FocusInput('userNm')" oninput="ChangeInput('userNm')" onblur="BlurInput('userNm')" value="" required="">
                 <span class="delete-btn" onclick="DeleteInput('userNm')"></span>
             </div>
 
             <h3>전화번호</h3>
             <div class="input-wrap sm">
-                <input id="user_telNo" class="input" placeholder="기관번호를 입력 해 주세요" onfocus="FocusInput('user_telNo')" oninput="ChangeInput('user_telNo')" onblur="BlurInput('user_telNo')" value="" required="">
+                <input id="user_telNo" class="input" placeholder="전화번호를 입력 해 주세요" onfocus="FocusInput('user_telNo')" oninput="ChangeInput('user_telNo')" onblur="BlurInput('user_telNo')" value="" required="">
                 <span class="delete-btn" onclick="DeleteInput('user_telNo')"></span>
             </div>
 
             <h3>주소</h3>
             <div class="input-wrap sm">
-                <input id="user_address_1" class="input" placeholder="기관번호를 입력 해 주세요" disabled>
+                <input id="user_address_1" class="input" placeholder="주소를 입력 해 주세요" disabled>
                 <span class="delete-btn" onclick="DeleteInput('user_address')"></span>
                 
                 <button class="address-btn" onclick="daumAPI()">
@@ -202,34 +202,42 @@
 
             </div>
             <div class="input-wrap sm">
-                <input id="user_address_2" class="input" placeholder="기관번호를 입력 해 주세요" onfocus="FocusInput('user_address_2')" oninput="ChangeInput('user_address_2')" onblur="BlurInput('user_address_2')" value="" required="">
+                <input id="user_address_2" class="input" placeholder="상세주소를 입력 해 주세요" onfocus="FocusInput('user_address_2')" oninput="ChangeInput('user_address_2')" onblur="BlurInput('user_address_2')" value="" required="">
                 <span class="delete-btn" onclick="DeleteInput('user_address_2')"></span>
             </div>
         </div>
         <br>
         <div id="pw_container"class="test">
             <form id="pwForm">
-            <h3 class="title2">[비밀번호 변경]</h3>
-            <h3>현재 비밀번호</h3>
-            <div class="input-wrap sm">
-                <input id="now_password" type="password" class="input" placeholder="현재 비밀번호" autocomplete="new-now_password" onfocus="FocusInput('now_password')" oninput="ChangeInput('now_password')" onblur="BlurInput('now_password')" value="" >
-                <span class="delete-btn" onclick="DeleteInput('now_password')"></span>
-            </div>
+                <h3 class="title2">[비밀번호 변경]</h3>
+                <h3>현재 비밀번호</h3>
+                <div class="input-wrap sm">
+                    <input id="now_password" type="password" class="input" placeholder="현재 비밀번호" autocomplete="new-now_password" onfocus="FocusInput('now_password')" oninput="ChangeInput('now_password')" onblur="BlurInput('now_password')" value="" >
+                    <span class="delete-btn" onclick="DeleteInput('now_password')"></span>
+                </div>
 
-            <h3>새로운 비밀번호</h3>
-            <div class="input-wrap sm">
-                <input id="new_password" type="password" class="input" placeholder="새로운 비밀번호" autocomplete="new-password" onfocus="FocusInput('new_password')" oninput="ChangeInput('new_password')" onblur="BlurInput('new_password')" value="" >
-                <span class="delete-btn" onclick="DeleteInput('new_password')"></span>
-            </div>
+                <h3>새로운 비밀번호</h3>
+                <div class="input-wrap sm">
+                    <input id="new_password" type="password" class="input" placeholder="새로운 비밀번호" autocomplete="new-password" onfocus="FocusInput('new_password')" oninput="ChangeInput('new_password')" onblur="BlurInput('new_password')" value="" >
+                    <span class="delete-btn" onclick="DeleteInput('new_password')"></span>
+                </div>
 
-            <h3>새로운 비밀번호 확인</h3>
-            <div class="input-wrap sm">
-                <input id="check_password" type="password" class="input" placeholder="새로운 비밀번호 확인" autocomplete="new-check_password" onfocus="FocusInput('check_password')" oninput="ChangeInput('check_password')" onblur="BlurInput('check_password')" value="" >
-                <span class="delete-btn" onclick="DeleteInput('check_password')"></span>
-                <button id="checkPassBtn" type="button">확인</button>
-            </div>
-        </form>
+                <h3>새로운 비밀번호 확인</h3>
+                <div class="input-wrap sm">
+                    <input id="check_password" type="password" class="input" placeholder="새로운 비밀번호 확인" autocomplete="new-check_password" onfocus="FocusInput('check_password')" oninput="ChangeInput('check_password')" onblur="BlurInput('check_password')" value="" >
+                    <span class="delete-btn" onclick="DeleteInput('check_password')"></span>
+                    <button id="checkPassBtn" type="button">확인</button>
+                </div>
+            </form>
+            <form id="snsForm">
+                <div class="input-wrap sm" id="naverDisconnect">
+                    <a id="naver-login-btn" href="{{api_domain}}/naverDisconnect">
+                        네이버연결끊기
+                    </a>
+                </div>
+            </form>
         </div>
+        
     </form>
     </main>
     <footer id="saveBtn" class="footer">저장</footer>
@@ -238,6 +246,7 @@
 
         $(document).ready(function () {
             localStorage.getItem("id")
+            getLoginInfo()
         })
 
         
@@ -275,9 +284,6 @@
             OpenModal('확인', "", true, "", "", "확인", "", "", "xs", values)
         });
 
-        
-
-
         //다음 우편번호 API
         function daumAPI(){
             new daum.Postcode({
@@ -286,6 +292,51 @@
                     $("#user_address_1").val(data.address)
                 }
             }).open();
+        }
+        // 로그인 정보 가져오기
+        function getLoginInfo(){
+            let formData = new FormData();
+
+            let id = localStorage.getItem("id");
+            let token = localStorage.getItem("token");
+
+            formData.append("id",id);
+            formData.append("token",token);
+            fetch("{{api_domain}}/getUserInfo", {
+                method: "POST",
+                headers: {"Authorization":token},
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                userDataSet(data)
+                loginTypeManage(data)
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        }
+        // 기본정보세팅
+        function userDataSet(userInfo){
+            console.log(userInfo)   
+            console.log(userInfo.userId)
+            $('#userID').val(userInfo.userId)
+            $('#userNm').val(userInfo.name)
+            $('#user_telNo').val(userInfo.phoneNo)
+            $('#user_address_1').val(userInfo.addr1)
+            $('#user_address_2').val(userInfo.addr2)
+        }
+        // 로그인수단관리
+        function loginTypeManage(userInfo){
+            $('#pwForm').attr('style','display:none');
+            if(data.snsType=='')
+            {
+                $('#pwForm').attr('style','display:block');
+            }
+            if(data.snsType=='NAVER')
+            {
+                $('#naverDisconnect').attr('style','display:block');
+            }
         }
     </script>
 
