@@ -14,9 +14,6 @@
 
     <style>
         /* 기존 스타일 코드 */
-        :root {
-            --blue900: #0044cc;
-        }
 
         html, body {
             height: 100%;
@@ -48,7 +45,6 @@
             font-size: 16px;
         }
 
-        .header h2 { margin: 0; font-size: 18px; }
         .btn { 
             padding: 8px 14px; 
             background: white; 
@@ -96,6 +92,7 @@
             border-radius: 10px;
             box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
             margin: 0 auto;
+            margin-top: 20px;
         }
 
         .tab-content.active { display: block; }
@@ -105,19 +102,11 @@
             overflow-x: auto;
         }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-            background: white;
-            min-width: 600px;
-        }
 
         th, td {
-            border: 1px solid #ddd;
             padding: 6px 10px;
             text-align: center;
-            font-size: 13px;
+            font-size: 12px;
             white-space: nowrap;
         }
 
@@ -181,6 +170,8 @@
                 max-width: 100px;
             }
         }
+
+        
     </style>
 </head>
 <body>
@@ -203,9 +194,18 @@
             <div id="depositAvgIntr">
                 <p id="depositAvgInfo"></p>
             </div>
-            <div class="table-container">
-                <table>
-                    <thead>
+            <table class="table intent-table">
+                <colgroup>
+                    <col style="width: 15%;">
+                    <col>
+                    <col style="width: 10%;">
+                    <col style="width: 10%;">
+                    <col style="width: 10%;">
+                    <col style="width: 10%;">
+                    <col style="width: 10%;">
+                    <col style="width: 10%;">
+                  </colgroup>
+                    <thead  class="thead type2">
                         <tr>
                             <th>은행</th>
                             <th>상품명</th>
@@ -213,14 +213,15 @@
                             <th>이자방식</th>
                             <th>기본금리</th>
                             <th>최대금리</th>
-                            <th>전월취급<br>평균금리</th>
+                            <th style="vertical-align: middle;">
+                                <span style="display: block; line-height: 2;">전월취급</span>
+                                <span style="display: block; line-height: 1.6;">평균금리</span>
+                            </th>
                             <th>링크</th>
                         </tr>
                     </thead>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
+                    <tbody class="tbody"></tbody>
+            </table>
         </div>
 
         <div id="loan" class="tab-content">
@@ -229,8 +230,17 @@
                 <p id="loanAvgInfo"></p>
             </div>
             <div class="table-container">
-                <table>
-                    <thead>
+                <table class="table intent-table">
+                    <colgroup>
+                        <col style="width: 15%;">
+                        <col>
+                        <col style="width: 10%;">
+                        <col style="width: 10%;">
+                        <col style="width: 15%;">
+                        <col style="width: 10%;">
+                        <col style="width: 10%;">
+                      </colgroup>
+                    <thead  class="thead type2">
                         <tr>
                             <th>은행</th>
                             <th>상품명</th>
@@ -241,8 +251,7 @@
                             <th>최대금리</th>
                         </tr>
                     </thead>
-                    <tbody>
-                    </tbody>
+                    <tbody class="tbody"></tbody>
                 </table>
             </div>
         </div>
@@ -266,10 +275,16 @@
 
                     // 상품 데이터 반복 처리하여 <tr> 추가
                     response.forEach(item => {
+                        const prodNm = item.prod_nm.includes('(')
+                        ? `${item.prod_nm.split('(')[0]}<br>(${item.prod_nm.split('(')[1]}`
+                        : item.prod_nm;
+                        const cornm = item.cor_nm.includes('(')
+                        ? `${item.cor_nm.split('(')[0]}<br>(${item.cor_nm.split('(')[1]}`
+                        : item.cor_nm;
                         const row = document.createElement("tr");
                         row.innerHTML = `
-                            <td>${item.cor_nm}</td>
-                            <td>${item.prod_nm}</td>
+                            <td>${cornm}</td>
+                            <td>${prodNm}</td>
                             <td>${item.prod_type}</td>
                             <td>${item.saving_method}</td>
                             <td>${item.base_intr}%</td>
@@ -297,9 +312,15 @@
                     // 대출 상품 데이터 반복 처리하여 <tr> 추가
                     response.forEach(item => {
                         const row = document.createElement("tr");
+                        const prodNm = item.prod_nm.includes('(')
+                        ? `${item.prod_nm.split('(')[0]}<br>(${item.prod_nm.split('(')[1]}`
+                        : item.prod_nm;
+                        const cornm = item.cor_nm.includes('(')
+                        ? `${item.cor_nm.split('(')[0]}<br>(${item.cor_nm.split('(')[1]}`
+                        : item.cor_nm;
                         row.innerHTML = `
-                            <td>${item.cor_nm}</td>
-                            <td>${item.prod_nm}</td>
+                            <td>${cornm}</td>
+                            <td>${prodNm}</td>
                             <td>${item.residence_type}</td>
                             <td>${item.intr_method}</td>
                             <td>${item.repay_method}</td>
