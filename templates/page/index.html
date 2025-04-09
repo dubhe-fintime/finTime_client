@@ -174,7 +174,8 @@
                     required />
                 <button class="login-button" onclick="login(event)">로그인</button>
             </form>
-            <!-- <img src="{{ url_for('static', filename='assets/images/naver_login_icon2.png') }}" style="width:200px;height:auto" onclick="snsLogin(event,'naver')"/> -->
+            <!-- <img src="{{ url_for('static', filename='assets/images/naver_login_icon2.png') }}" style="width:200px;height:auto" onclick="snsLogin(event,'naver')"/>
+            <img src="{{ url_for('static', filename='assets/images/kakao_login_medium_narrow.png') }}" style="width:200px;height:auto" onclick="snsLogin(event,'kakao')"/> -->
         </main>
     </div>
 </body>
@@ -216,12 +217,14 @@
         if(type=='naver'){
             apiUrl +='/naverLogin'
         }
+        else if(type=='kakao'){
+            apiUrl +='/kakaoLogin'
+        }
         else
         {
             alert('개발중')
             return false;
         }
-
         window.location.href = apiUrl
     }
 

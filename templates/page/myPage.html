@@ -230,9 +230,12 @@
                 </div>
             </form>
             <form id="snsForm">
-                <div class="input-wrap sm" id="naverDisconnect">
-                    <a id="naver-login-btn" href="{{api_domain}}/naverDisconnect">
+                <div class="input-wrap sm" id="snsDisConnect">
+                    <a id="naver-login-btn" onclick="snsDisconnect('NAVER')">
                         네이버연결끊기
+                    </a>
+                    <a id="kakao-login-btn" onclick="snsDisconnect('KAKAO')">
+                        카카오연결끊기
                     </a>
                 </div>
             </form>
@@ -318,8 +321,6 @@
         }
         // 기본정보세팅
         function userDataSet(userInfo){
-            console.log(userInfo)   
-            console.log(userInfo.userId)
             $('#userID').val(userInfo.userId)
             $('#userNm').val(userInfo.name)
             $('#user_telNo').val(userInfo.phoneNo)
@@ -328,15 +329,45 @@
         }
         // 로그인수단관리
         function loginTypeManage(userInfo){
+            console.log(userInfo.snsType)
             $('#pwForm').attr('style','display:none');
-            if(data.snsType=='')
+            $('#naver-login-btn').attr('style','display:none');
+            $('#kakao-login-btn').attr('style','display:none');
+            if(userInfo.snsType=='')
             {
                 $('#pwForm').attr('style','display:block');
             }
-            if(data.snsType=='NAVER')
+            if(userInfo.snsType=='NAVER')
             {
-                $('#naverDisconnect').attr('style','display:block');
+                $('#naver-login-btn').attr('style','display:block');
             }
+            if(userInfo.snsType=='KAKAO')
+            {
+                $('#kakao-login-btn').attr('style','display:block');
+            }
+        }
+        // SNS연결끊기
+        function snsDisconnect(snsType){
+            console.log(snsType)
+            let formData = new FormData();
+
+            let id = localStorage.getItem("id");
+            let token = localStorage.getItem("token");
+
+            formData.append("id",id);
+            formData.append("snsType", snsType)
+            fetch("{{api_domain}}/snsDisconnect", {
+                method: "POST",
+                headers: {"Authorization":token},
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
         }
     </script>
 
