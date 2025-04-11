@@ -364,6 +364,7 @@
             .then(response => response.json())
             .then(data => {
                 console.log(data)
+                window.location.href = "{{url_for('adminLogin')}}"
             })
             .catch(error => {
                 console.error("Error:", error);
